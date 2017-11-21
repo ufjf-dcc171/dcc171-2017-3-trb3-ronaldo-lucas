@@ -1,5 +1,4 @@
-#Trabalho 3 de Laboratório de Programação III - 2017.3
-
+# Trabalho 3 de Laboratório de Programação III - 2017.3
 
 #### Nome: José Ronaldo Matricula: -----------   Curso: Sistemas de Informação <br> Nome: Lucas Diniz da Costa Matricula: 201465524A   Curso: Ciências Exatas
 
