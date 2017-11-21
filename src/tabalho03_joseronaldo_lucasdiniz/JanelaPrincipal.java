@@ -2,8 +2,8 @@ package tabalho03_joseronaldo_lucasdiniz;
 
 import java.io.IOException;
 
-public class frmPrincipal extends javax.swing.JFrame {
-    public frmPrincipal() throws IOException {
+public class JanelaPrincipal extends javax.swing.JFrame {
+    public JanelaPrincipal() throws IOException {
         initComponents();
     }
     

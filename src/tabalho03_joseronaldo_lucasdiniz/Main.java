@@ -3,10 +3,10 @@ package tabalho03_joseronaldo_lucasdiniz;
 import java.awt.Color;
 import java.io.IOException;
 
-public class Tabalho03_JoseRonaldo_LucasDiniz {
+public class Main {
 
     public static void main(String[] args) throws IOException {
-        frmPrincipal janelaPrincipal = new frmPrincipal();
+        JanelaPrincipal janelaPrincipal = new JanelaPrincipal();
         janelaPrincipal.getContentPane().setBackground(Color.white);
         janelaPrincipal.setVisible(true);
     }

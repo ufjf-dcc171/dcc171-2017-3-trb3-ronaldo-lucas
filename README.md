@@ -7,7 +7,10 @@
 **Classes utilizadas:**
 
 - Interfaces:
-	- frmPrincipal;
+	- JanelaPrincipal;
+	- CadastrarColaborador;
+	- CadastrarProjeto;
+	- CadastrarTarefa
 - Dados:
 	- Colaborador;
 	- Projeto;
