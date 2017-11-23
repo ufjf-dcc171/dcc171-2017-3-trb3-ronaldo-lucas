@@ -4,6 +4,13 @@
 
 **Texto Explicativo:**<p align="justify"> O sistema tem como objetivo armazenar e trabalhar com o gerenciamento de tarefas, projetos e colaboradores. Além disso, ele visa ter uma melhor estruturação para facilitar o entendimento pelo usuário.</p>
 
+**Modelo de dados:**
+
+
+**Modelo do banco de dados:**
+<a href="https://ibb.co/gchL2m"><img src="https://image.ibb.co/dJp02m/ModeloBD.png" alt="ModeloBD" border="0"></a>
+
+
 **Classes utilizadas:**
 
 - Interfaces:
