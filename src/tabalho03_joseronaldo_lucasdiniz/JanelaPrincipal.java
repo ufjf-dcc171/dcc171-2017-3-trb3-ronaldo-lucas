@@ -1,5 +1,6 @@
 package tabalho03_joseronaldo_lucasdiniz;
 
+import java.awt.Color;
 import java.io.IOException;
 
 public class JanelaPrincipal extends javax.swing.JFrame {
@@ -38,12 +39,32 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         mnCadastro.setText("Cadastro");
 
         mnColaborador.setText("Cadastro de Colaborador");
+        mnColaborador.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mnColaboradorMouseClicked(evt);
+            }
+        });
+        mnColaborador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnColaboradorActionPerformed(evt);
+            }
+        });
         mnCadastro.add(mnColaborador);
 
         mnProjetos.setText("Cadastro de Projetos");
+        mnProjetos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnProjetosActionPerformed(evt);
+            }
+        });
         mnCadastro.add(mnProjetos);
 
         mnTarefas.setText("Cadastro de Tarefas");
+        mnTarefas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnTarefasActionPerformed(evt);
+            }
+        });
         mnCadastro.add(mnTarefas);
 
         jMenuBar1.add(mnCadastro);
@@ -80,6 +101,34 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         
     }//GEN-LAST:event_formWindowActivated
+    
+    
+    private void mnColaboradorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mnColaboradorMouseClicked
+        
+    }//GEN-LAST:event_mnColaboradorMouseClicked
+    
+    //Abre Cadastro Colaborador
+    private void mnColaboradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnColaboradorActionPerformed
+        CadastrarColaborador cadColaborador = new CadastrarColaborador();
+        cadColaborador.getContentPane().setBackground(Color.white);
+        cadColaborador.setLocationRelativeTo(null);
+        cadColaborador.setVisible(true);
+    }//GEN-LAST:event_mnColaboradorActionPerformed
+
+    //Abre Cadastro Projetos
+    private void mnProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnProjetosActionPerformed
+        CadastrarProjeto cadProjeto = new CadastrarProjeto();
+        cadProjeto.getContentPane().setBackground(Color.white);
+        cadProjeto.setLocationRelativeTo(null);
+        cadProjeto.setVisible(true);
+    }//GEN-LAST:event_mnProjetosActionPerformed
+
+    private void mnTarefasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnTarefasActionPerformed
+        CadastrarTarefa cadTarefa = new CadastrarTarefa();
+        cadTarefa.getContentPane().setBackground(Color.white);
+        cadTarefa.setLocationRelativeTo(null);
+        cadTarefa.setVisible(true);
+    }//GEN-LAST:event_mnTarefasActionPerformed
 
     
     

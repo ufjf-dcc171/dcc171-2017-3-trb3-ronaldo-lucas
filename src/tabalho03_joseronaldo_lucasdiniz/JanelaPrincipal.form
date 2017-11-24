@@ -13,16 +13,26 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cadastro de Colaborador"/>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="mnColaboradorMouseClicked"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnColaboradorActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnProjetos">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cadastro de Projetos"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnProjetosActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnTarefas">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Cadastro de Tarefas"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnTarefasActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
