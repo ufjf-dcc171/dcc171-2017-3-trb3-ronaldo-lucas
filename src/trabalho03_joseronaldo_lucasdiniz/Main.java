@@ -1,4 +1,4 @@
-package tabalho03_joseronaldo_lucasdiniz;
+package trabalho03_joseronaldo_lucasdiniz;
 
 import java.awt.Color;
 import java.io.IOException;
