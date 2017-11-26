@@ -1,4 +1,4 @@
-package trabalho03_joseronaldo_lucasdiniz;
+package principal;
 
 import java.util.Date;
 
@@ -59,6 +59,5 @@ public class Tarefa {
     public void setDT_FIM(Date DT_FIM) {
         this.DT_FIM = DT_FIM;
     }
-    
     
 }

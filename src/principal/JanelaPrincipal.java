@@ -1,4 +1,4 @@
-package trabalho03_joseronaldo_lucasdiniz;
+package principal;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/trabalho03_joseronaldo_lucasdiniz/fundo_principal.jpg"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/principal/fundo_principal.jpg"))); // NOI18N
 
         mnCadastro.setText("Cadastro");
 

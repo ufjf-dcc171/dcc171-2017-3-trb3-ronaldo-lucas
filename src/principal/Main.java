@@ -1,4 +1,4 @@
-package trabalho03_joseronaldo_lucasdiniz;
+package principal;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -10,6 +10,5 @@ public class Main {
         janelaPrincipal.getContentPane().setBackground(Color.white);
         janelaPrincipal.setVisible(true);
     }
-    
     
 }

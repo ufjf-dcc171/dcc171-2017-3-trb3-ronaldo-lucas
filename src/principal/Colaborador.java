@@ -1,4 +1,4 @@
-package trabalho03_joseronaldo_lucasdiniz;
+package principal;
 
 public class Colaborador {
     Integer ID;
