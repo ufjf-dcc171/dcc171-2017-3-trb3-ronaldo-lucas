@@ -36,7 +36,6 @@ public class Colaborador {
 
     public void setEMAIL(String EMAIL) {
         this.EMAIL = EMAIL;
-    }
-    
+    }    
     
 }

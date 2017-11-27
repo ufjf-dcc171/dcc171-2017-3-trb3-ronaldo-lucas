@@ -109,10 +109,16 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     
     //Abre Cadastro Colaborador
     private void mnColaboradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnColaboradorActionPerformed
-        CadastrarColaborador cadColaborador = new CadastrarColaborador();
-        cadColaborador.getContentPane().setBackground(Color.white);
-        cadColaborador.setLocationRelativeTo(null);
-        cadColaborador.setVisible(true);
+        try {
+            ColaboradorDAO dao = new ColaboradroDAOJDBC();
+            CadastrarColaborador cadColaborador = new CadastrarColaborador(dao);
+            cadColaborador.getContentPane().setBackground(Color.white);
+            cadColaborador.setLocationRelativeTo(null);
+            cadColaborador.setVisible(true);    
+        } catch (Exception erro) {
+            erro.printStackTrace();
+        }
+        
     }//GEN-LAST:event_mnColaboradorActionPerformed
 
     //Abre Cadastro Projetos

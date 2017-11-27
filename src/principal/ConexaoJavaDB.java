@@ -12,7 +12,7 @@ public class ConexaoJavaDB {
     public static Connection getConnection() throws Exception {
         if (instancia == null) {
             Class.forName("org.apache.derby.jdbc.ClientDriver");                ///Verifica se o driver do banco está disponível
-            String driverURL = "jdbc:derby://localhost:1527/NOME DO BANCO DE DADOS";
+            String driverURL = "jdbc:derby://localhost:1527/BD";
             instancia = DriverManager.getConnection(driverURL, "usuario", "senha");        ///Fazendo conexão com o banco de dados
         }
         return instancia;
