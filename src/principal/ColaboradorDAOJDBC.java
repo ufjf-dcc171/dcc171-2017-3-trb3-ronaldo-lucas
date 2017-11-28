@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColaboradroDAOJDBC implements ColaboradorDAO{
+public class ColaboradorDAOJDBC implements ColaboradorDAO{
     private final Connection conexao;
     private final PreparedStatement comandoInsere;
     private final PreparedStatement comandoExclui;
@@ -14,7 +14,7 @@ public class ColaboradroDAOJDBC implements ColaboradorDAO{
     private final PreparedStatement comandoListar;
     private final PreparedStatement comandoSeleciona;
     
-    public ColaboradroDAOJDBC() throws Exception{
+    public ColaboradorDAOJDBC() throws Exception{
         conexao = ConexaoJavaDB.getConnection();
         comandoInsere = conexao.prepareStatement("Insert Into COLABORADOR(id, nome, email) VALUES (?,?,?)");
         comandoExclui = conexao.prepareStatement("Delete From COLABORADOR Where ID = ?");
@@ -35,16 +35,16 @@ public class ColaboradroDAOJDBC implements ColaboradorDAO{
 
     @Override
     public List<Colaborador> listaTodos() throws Exception {
-        List<Colaborador> visitantes = new ArrayList<>();
+        List<Colaborador> colaboradores = new ArrayList<>();
         ResultSet resultado = comandoListar.executeQuery();
         while (resultado.next()) {
-            Colaborador v = new Colaborador();
-            v.setID(resultado.getInt("id"));
-            v.setNOME(resultado.getString("nome"));
-            v.setEMAIL(resultado.getString("email"));
-            visitantes.add(v);
+            Colaborador colab = new Colaborador();
+            colab.setID(resultado.getInt("id"));
+            colab.setNOME(resultado.getString("nome"));
+            colab.setEMAIL(resultado.getString("email"));
+            colaboradores.add(colab);
         }
-        return visitantes;
+        return colaboradores;
     }
 
     @Override

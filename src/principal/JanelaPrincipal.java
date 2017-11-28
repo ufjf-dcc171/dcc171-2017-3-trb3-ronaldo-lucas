@@ -110,7 +110,7 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     //Abre Cadastro Colaborador
     private void mnColaboradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnColaboradorActionPerformed
         try {
-            ColaboradorDAO dao = new ColaboradroDAOJDBC();
+            ColaboradorDAO dao = new ColaboradorDAOJDBC();
             CadastrarColaborador cadColaborador = new CadastrarColaborador(dao);
             cadColaborador.getContentPane().setBackground(Color.white);
             cadColaborador.setLocationRelativeTo(null);
