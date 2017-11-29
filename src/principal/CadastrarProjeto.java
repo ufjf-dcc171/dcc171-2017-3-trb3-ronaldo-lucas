@@ -1,14 +1,19 @@
 package principal;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class CadastrarProjeto extends javax.swing.JFrame {
     private final ProjetoDAO daoProjeto;
     private Boolean fNovo = false;
     
     public CadastrarProjeto(ProjetoDAO daoProjeto) {
-        this.daoProjeto = daoProjeto;
+        this.daoProjeto = daoProjeto;        
         initComponents();
     }
     @SuppressWarnings("unchecked")
@@ -26,14 +31,19 @@ public class CadastrarProjeto extends javax.swing.JFrame {
         tabelaProjetos = new javax.swing.JTable();
         lblDtInicio = new javax.swing.JLabel();
         lblDtTermino = new javax.swing.JLabel();
-        txtDataInicio = new javax.swing.JTextField();
-        txtDataTermino = new javax.swing.JTextField();
         txtCod = new javax.swing.JTextField();
         lblCodigo = new javax.swing.JLabel();
         lblTabelaProjetos = new javax.swing.JLabel();
+        txtDataInicio = new javax.swing.JFormattedTextField();
+        txtDataFim = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Projetos");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         lblDescricao.setText("Descrição do projeto");
 
@@ -109,12 +119,6 @@ public class CadastrarProjeto extends javax.swing.JFrame {
 
         lblDtTermino.setText("Data de término");
 
-        txtDataInicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDataInicioActionPerformed(evt);
-            }
-        });
-
         txtCod.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCodActionPerformed(evt);
@@ -125,6 +129,18 @@ public class CadastrarProjeto extends javax.swing.JFrame {
 
         lblTabelaProjetos.setText("Tabela de projetos");
 
+        try {
+            txtDataInicio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            txtDataFim.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -134,28 +150,30 @@ public class CadastrarProjeto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblDescricao)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(txtCod, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblCodigo, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblDtInicio)
-                                    .addComponent(txtDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(txtDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(26, 26, 26))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtDataTermino, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnGravar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblDtTermino)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblDtTermino)
+                            .addComponent(txtDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 27, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTabelaProjetos)
@@ -175,7 +193,7 @@ public class CadastrarProjeto extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDataTermino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblDescricao)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -200,23 +218,19 @@ public class CadastrarProjeto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtDataInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataInicioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDataInicioActionPerformed
-
     private void txtCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        Integer IDincremento = 0;
+        Integer IDincremento = 1;
         try {
             limpaCampos();
             fNovo = true;
             IDincremento = daoProjeto.retornaID();        
             txtCod.setEnabled(false);
             txtCod.setText(IDincremento + "");
-            txtDescricao.grabFocus();
+            txtDataInicio.grabFocus();
             
             btnNovo.setEnabled(false);
             btnExcluir.setEnabled(false);            
@@ -227,21 +241,27 @@ public class CadastrarProjeto extends javax.swing.JFrame {
 
     private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
         try {            
+            SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+            Date dataInicio = formato.parse(txtDataInicio.getText());
+            Date dataFim = formato.parse(txtDataFim.getText());
+            
             if (fNovo == true){
                 Projeto projeto = new Projeto();
                 projeto.setID(Integer.parseInt(txtCod.getText()));
                 projeto.setDESCRICAO(txtDescricao.getText());
-                projeto.setDT_INICIO(txtDataInicio.getText());
+                projeto.setDT_INICIO(dataInicio);
+                projeto.setDT_FIM(dataFim);
                 daoProjeto.criar(projeto);    
             }else{
                 Projeto projeto = new Projeto();
                 projeto.setID(Integer.parseInt(txtCod.getText()));
                 projeto.setDESCRICAO(txtDescricao.getText());
-                projeto.setDT_INICIO(txtDataInicio.getText());
-                daoProjeto.alterar(c); 
+                projeto.setDT_INICIO(dataInicio);
+                projeto.setDT_FIM(dataFim);
+                daoProjeto.alterar(projeto); 
             }
             
-            System.out.println("Gravação efetuada com sucesso!");
+            JOptionPane.showMessageDialog(null, "Gravação efetuada com sucesso!", "Erro", JOptionPane.ERROR_MESSAGE);
             fNovo = false;
             btnNovo.setEnabled(true);
             btnExcluir.setEnabled(true);
@@ -255,16 +275,67 @@ public class CadastrarProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGravarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        // TODO add your handling code here:
+        try {
+            if (!"".equals(txtCod.getText())) {
+                if (fNovo == false){                
+                    int resposta;
+                    resposta = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir?", "", JOptionPane.YES_NO_OPTION);
+
+                    if (resposta == JOptionPane.YES_OPTION) {
+                        Projeto projeto = new Projeto();
+                        projeto.setID(Integer.parseInt(txtCod.getText()));
+                        daoProjeto.excluir(projeto);
+                        System.out.println("Exclusão efetuada com sucesso!");
+
+                        btnNovo.setEnabled(true);
+                        btnExcluir.setEnabled(true);
+                        txtCod.setEnabled(true);
+                        limpaCampos();
+                        atualizaTabela();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecione um colaborador!!!", "Erro", JOptionPane.ERROR_MESSAGE);
+                }    
+            }                        
+        } catch (Exception erro) {
+            erro.printStackTrace();
+        }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        limpaCampos();
+        fNovo = false;
+        txtCod.grabFocus();
+        txtCod.setEnabled(true); 
+        btnNovo.setEnabled(true);
+        btnGravar.setEnabled(true);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void tabelaProjetosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaProjetosMouseClicked
-        // TODO add your handling code here:
+        if(evt.getClickCount() == 2){
+            try {
+                if (fNovo == false){
+                    if (tabelaProjetos.getSelectedRowCount() == 0) {
+                        return;
+                    }
+                    DefaultTableModel modelo = (DefaultTableModel) tabelaProjetos.getModel();
+                    int linhaSelecionada = tabelaProjetos.getSelectedRow();
+                    txtCod.setText(tabelaProjetos.getValueAt(linhaSelecionada, 0).toString());
+                    txtDescricao.setText(tabelaProjetos.getValueAt(linhaSelecionada, 1).toString());
+                    txtDataInicio.setText(tabelaProjetos.getValueAt(linhaSelecionada, 2).toString());
+                    txtDataFim.setText(tabelaProjetos.getValueAt(linhaSelecionada, 3).toString());
+                    txtCod.setEnabled(false);    
+                }
+            } catch (Exception erro) {
+                erro.printStackTrace();
+            }        
+        }
     }//GEN-LAST:event_tabelaProjetosMouseClicked
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        atualizaTabela();
+        limpaCampos();
+    }//GEN-LAST:event_formWindowActivated
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
@@ -280,8 +351,34 @@ public class CadastrarProjeto extends javax.swing.JFrame {
     private javax.swing.JLabel lblTabelaProjetos;
     private javax.swing.JTable tabelaProjetos;
     private javax.swing.JTextField txtCod;
-    private javax.swing.JTextField txtDataInicio;
-    private javax.swing.JTextField txtDataTermino;
+    private javax.swing.JFormattedTextField txtDataFim;
+    private javax.swing.JFormattedTextField txtDataInicio;
     private javax.swing.JTextArea txtDescricao;
     // End of variables declaration//GEN-END:variables
+
+    private void limpaCampos() {
+        txtCod.setText("");
+        txtDataFim.setText("");
+        txtDataInicio.setText("");
+        txtDescricao.setText("");    
+    }
+
+    private void atualizaTabela() {
+        try {
+            DefaultTableModel model =(DefaultTableModel) tabelaProjetos.getModel();
+            //tabelaColaborador.clearSelection();
+            model.setNumRows(0);           ///Limpando a tabela
+            List<Projeto> projetos = daoProjeto.listaTodos();
+            for(int i = 0; i < projetos.size(); i++){
+                model.addRow(new Object[]{
+                    projetos.get(i).getID(),
+                    projetos.get(i).getDESCRICAO(),
+                    projetos.get(i).getDT_INICIO(),
+                    projetos.get(i).getDT_FIM()
+                });
+            }
+        } catch (Exception erro) {
+            erro.printStackTrace();
+        }
+    }
 }

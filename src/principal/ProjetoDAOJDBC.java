@@ -1,7 +1,6 @@
 package principal;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
     private final PreparedStatement comandoAltera;
     private final PreparedStatement comandoListar;
     private final PreparedStatement comandoSeleciona;
-
+    
     public ProjetoDAOJDBC() throws Exception {
         conexao = ConexaoJavaDB.getConnection();
         comandoInsere = conexao.prepareStatement("Insert Into PROJETO(id, descricao, dt_inicio, dt_fim) VALUES (?,?,?,?)");
@@ -30,8 +29,8 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
         comandoInsere.clearParameters();
         comandoInsere.setInt(1, projeto.getID());
         comandoInsere.setString(2, projeto.getDESCRICAO());
-        comandoInsere.setDate(3, (Date) projeto.getDT_INICIO());
-        comandoInsere.setDate(4, (Date) projeto.getDT_FIM());
+        comandoInsere.setDate(3, new java.sql.Date (projeto.getDT_INICIO().getTime()));
+        comandoInsere.setDate(4, new java.sql.Date (projeto.getDT_FIM().getTime()));
         comandoInsere.executeUpdate();
     }
 
@@ -49,15 +48,15 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
     public void alterar(Projeto projeto) throws Exception {
         comandoAltera.clearParameters();        
         comandoAltera.setString(1, projeto.getDESCRICAO());
-        comandoAltera.setDate(2, (Date) projeto.getDT_INICIO());
-        comandoAltera.setDate(3, (Date) projeto.getDT_FIM());
+        comandoAltera.setDate(2, new java.sql.Date (projeto.getDT_INICIO().getTime()));
+        comandoAltera.setDate(3, new java.sql.Date (projeto.getDT_FIM().getTime()));
         comandoAltera.setInt(4, projeto.getID());
         comandoAltera.executeUpdate();
     }
 
     @Override
     public Integer retornaID() throws Exception {
-        Integer id = 0;
+        Integer id = 1;
         ResultSet resultado = comandoSeleciona.executeQuery();
         while (resultado.next()) {
             id = resultado.getInt("id") + 1;

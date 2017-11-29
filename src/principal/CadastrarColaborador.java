@@ -172,7 +172,7 @@ public final class CadastrarColaborador extends javax.swing.JFrame {
 
     //OnClick Botão Novo
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        Integer IDincremento = 0;
+        Integer IDincremento = 1;
         try {
             limpaCampos();
             fNovo = true;

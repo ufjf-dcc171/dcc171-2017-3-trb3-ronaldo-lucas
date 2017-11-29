@@ -2,6 +2,8 @@ package principal;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JanelaPrincipal extends javax.swing.JFrame {
     public JanelaPrincipal() throws IOException {
@@ -123,10 +125,17 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
     //Abre Cadastro Projetos
     private void mnProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnProjetosActionPerformed
-        CadastrarProjeto cadProjeto = new CadastrarProjeto();
+        ProjetoDAO dao;
+        try {
+            dao = new ProjetoDAOJDBC();
+            CadastrarProjeto cadProjeto = new CadastrarProjeto(dao);
         cadProjeto.getContentPane().setBackground(Color.white);
         cadProjeto.setLocationRelativeTo(null);
         cadProjeto.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_mnProjetosActionPerformed
 
     private void mnTarefasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnTarefasActionPerformed
