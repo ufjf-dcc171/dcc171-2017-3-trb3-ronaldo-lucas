@@ -1,13 +1,16 @@
 package principal;
 
 import java.util.Date;
+import java.util.List;
 
 public class Tarefa {
-    Integer ID;
-    Integer ID_PROJETO;
-    String DESCRICAO;
-    Date DT_INICIO;
-    Date DT_FIM;
+    private Integer ID;
+    private Integer ID_PROJETO;
+    private String DESCRICAO;
+    private Date DT_INICIO;
+    private Date DT_FIM;
+    private List<Tarefa> TAREFAS_DEPENDENTES;
+    private String STATUS;
 
     public Tarefa() {
     }

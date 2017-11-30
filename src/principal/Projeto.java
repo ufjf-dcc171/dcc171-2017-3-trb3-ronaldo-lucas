@@ -3,10 +3,10 @@ package principal;
 import java.util.Date;
 
 public class Projeto {
-    Integer ID;
-    String DESCRICAO;
-    Date DT_INICIO;
-    Date DT_FIM;
+    private Integer ID;
+    private String DESCRICAO;
+    private Date DT_INICIO;
+    private Date DT_FIM;
 
     public Projeto() {
     }

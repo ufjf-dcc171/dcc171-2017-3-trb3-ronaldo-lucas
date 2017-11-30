@@ -1,9 +1,9 @@
 package principal;
 
 public class Colaborador {
-    Integer ID;
-    String NOME;
-    String EMAIL;
+    private Integer ID;
+    private String NOME;
+    private String EMAIL;
 
     public Colaborador() {
     }

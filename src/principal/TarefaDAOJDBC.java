@@ -1,7 +1,6 @@
 package principal;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -30,8 +29,8 @@ public class TarefaDAOJDBC implements TarefaDAO{
         comandoInsere.clearParameters();
         comandoInsere.setInt(1, tarefa.getID());
         comandoInsere.setString(2, tarefa.getDESCRICAO());
-        comandoInsere.setDate(3, (Date) tarefa.getDT_INICIO());
-        comandoInsere.setDate(4, (Date) tarefa.getDT_FIM());
+        comandoAltera.setDate(3, new java.sql.Date (tarefa.getDT_INICIO().getTime()));
+        comandoAltera.setDate(4, new java.sql.Date (tarefa.getDT_FIM().getTime()));
         comandoInsere.executeUpdate();
     }
 
@@ -39,7 +38,7 @@ public class TarefaDAOJDBC implements TarefaDAO{
     public void excluir(Tarefa tarefa) throws Exception {
         /**
          * ********************************************************************
-         * Além de excluir o projeto, deve apagar tbm as tarefas ligadas a ele*
+         * Além de excluir a tarefa, deve apagar tbm as tarefas ligadas a ele*
          ********************************************************************
          */
         comandoExclui.clearParameters();
@@ -51,8 +50,8 @@ public class TarefaDAOJDBC implements TarefaDAO{
     public void alterar(Tarefa tarefa) throws Exception {
         comandoAltera.clearParameters();
         comandoAltera.setString(1, tarefa.getDESCRICAO());
-        comandoAltera.setDate(2, (Date) tarefa.getDT_INICIO());
-        comandoAltera.setDate(3, (Date) tarefa.getDT_FIM());
+        comandoAltera.setDate(2, new java.sql.Date (tarefa.getDT_INICIO().getTime()));
+        comandoAltera.setDate(3, new java.sql.Date (tarefa.getDT_FIM().getTime()));
         comandoAltera.setInt(4, tarefa.getID());
         comandoAltera.executeUpdate();
     }

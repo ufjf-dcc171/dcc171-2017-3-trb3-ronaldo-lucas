@@ -14,6 +14,7 @@ public class CadastrarProjeto extends javax.swing.JFrame {
     
     public CadastrarProjeto(ProjetoDAO daoProjeto) {
         this.daoProjeto = daoProjeto;        
+        
         initComponents();
     }
     @SuppressWarnings("unchecked")

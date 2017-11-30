@@ -6,10 +6,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JanelaPrincipal extends javax.swing.JFrame {
+
     public JanelaPrincipal() throws IOException {
         initComponents();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -101,14 +102,14 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        
+
     }//GEN-LAST:event_formWindowActivated
-    
-    
+
+
     private void mnColaboradorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mnColaboradorMouseClicked
-        
+
     }//GEN-LAST:event_mnColaboradorMouseClicked
-    
+
     //Abre Cadastro Colaborador
     private void mnColaboradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnColaboradorActionPerformed
         try {
@@ -116,37 +117,39 @@ public class JanelaPrincipal extends javax.swing.JFrame {
             CadastrarColaborador cadColaborador = new CadastrarColaborador(dao);
             cadColaborador.getContentPane().setBackground(Color.white);
             cadColaborador.setLocationRelativeTo(null);
-            cadColaborador.setVisible(true);    
+            cadColaborador.setVisible(true);
         } catch (Exception erro) {
             erro.printStackTrace();
         }
-        
+
     }//GEN-LAST:event_mnColaboradorActionPerformed
 
     //Abre Cadastro Projetos
     private void mnProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnProjetosActionPerformed
-        ProjetoDAO dao;
         try {
-            dao = new ProjetoDAOJDBC();
+            ProjetoDAO dao = new ProjetoDAOJDBC();
             CadastrarProjeto cadProjeto = new CadastrarProjeto(dao);
-        cadProjeto.getContentPane().setBackground(Color.white);
-        cadProjeto.setLocationRelativeTo(null);
-        cadProjeto.setVisible(true);
+            cadProjeto.getContentPane().setBackground(Color.white);
+            cadProjeto.setLocationRelativeTo(null);
+            cadProjeto.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(JanelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_mnProjetosActionPerformed
 
     private void mnTarefasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnTarefasActionPerformed
-        CadastrarTarefa cadTarefa = new CadastrarTarefa();
-        cadTarefa.getContentPane().setBackground(Color.white);
-        cadTarefa.setLocationRelativeTo(null);
-        cadTarefa.setVisible(true);
+        try {
+            TarefaDAO dao = new TarefaDAOJDBC();
+            CadastrarTarefa cadProjeto = new CadastrarTarefa(dao);
+            cadProjeto.getContentPane().setBackground(Color.white);
+            cadProjeto.setLocationRelativeTo(null);
+            cadProjeto.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_mnTarefasActionPerformed
 
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
