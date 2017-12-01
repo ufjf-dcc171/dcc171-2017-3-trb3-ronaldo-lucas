@@ -9,18 +9,19 @@ public class Tarefa {
     private String DESCRICAO;
     private Date DT_INICIO;
     private Date DT_FIM;
-    private List<Tarefa> TAREFAS_DEPENDENTES;
     private String STATUS;
+    
 
     public Tarefa() {
     }
 
-    public Tarefa(Integer ID, Integer ID_PROJETO, String DESCRICAO, Date DT_INICIO, Date DT_FIM) {
+    public Tarefa(Integer ID, Integer ID_PROJETO, String DESCRICAO, Date DT_INICIO, Date DT_FIM, String status) {
         this.ID = ID;
         this.ID_PROJETO = ID_PROJETO;
         this.DESCRICAO = DESCRICAO;
         this.DT_INICIO = DT_INICIO;
         this.DT_FIM = DT_FIM;
+        this.STATUS = status;
     }
 
     public Integer getID() {
@@ -61,6 +62,14 @@ public class Tarefa {
 
     public void setDT_FIM(Date DT_FIM) {
         this.DT_FIM = DT_FIM;
+    }
+    
+    public String getSTATUS() {
+        return STATUS;
+    }
+
+    public void setSTATUS(String STATUS) {
+        this.STATUS = STATUS;
     }
     
 }

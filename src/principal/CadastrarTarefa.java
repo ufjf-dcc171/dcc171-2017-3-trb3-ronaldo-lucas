@@ -1,13 +1,18 @@
 package principal;
 
+import java.awt.Color;
+import java.util.Date;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 public class CadastrarTarefa extends javax.swing.JFrame {
     private final TarefaDAO daoTarefa;
     private Boolean fNovo = false;
     
     public CadastrarTarefa(TarefaDAO daoTarefa) {
         this.daoTarefa = daoTarefa;  
-        
         initComponents();
+        comboBoxProjetos.addItem("3");
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -19,9 +24,7 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         txtAreaDescricao = new javax.swing.JTextArea();
         lblDataInicio = new javax.swing.JLabel();
-        txtDataInicio = new javax.swing.JTextField();
         lblDataFim = new javax.swing.JLabel();
-        txtDataFim = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaTarefas = new javax.swing.JTable();
         btnNovo = new javax.swing.JButton();
@@ -30,9 +33,19 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         lblStatus = new javax.swing.JLabel();
         comboBoxStatus = new javax.swing.JComboBox<>();
+        txtCodigo = new javax.swing.JTextField();
+        lblDataInicio1 = new javax.swing.JLabel();
+        txtDtFim = new javax.swing.JFormattedTextField();
+        txtDtInicio = new javax.swing.JFormattedTextField();
+        btnCriaDependencia = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Tarefas");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         comboBoxProjetos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -50,19 +63,7 @@ public class CadastrarTarefa extends javax.swing.JFrame {
 
         lblDataInicio.setText("Data de início");
 
-        txtDataInicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDataInicioActionPerformed(evt);
-            }
-        });
-
         lblDataFim.setText("Data de fim");
-
-        txtDataFim.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDataFimActionPerformed(evt);
-            }
-        });
 
         tabelaTarefas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -114,6 +115,38 @@ public class CadastrarTarefa extends javax.swing.JFrame {
             }
         });
 
+        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodigoActionPerformed(evt);
+            }
+        });
+
+        lblDataInicio1.setText("Código");
+
+        try {
+            txtDtFim.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            txtDtInicio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtDtInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDtInicioActionPerformed(evt);
+            }
+        });
+
+        btnCriaDependencia.setText("Criar Dependencia");
+        btnCriaDependencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCriaDependenciaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -129,53 +162,70 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                         .addComponent(btnExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(60, 60, 60)
                         .addComponent(btnCancelar))
-                    .addGroup(layout.createSequentialGroup()
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtCodigo, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblDataInicio1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblDataInicio)
+                                    .addComponent(txtDtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(lblProjetos)
-                            .addComponent(lblStatus)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(comboBoxStatus, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(comboBoxProjetos, javax.swing.GroupLayout.Alignment.LEADING, 0, 107, Short.MAX_VALUE)))
-                        .addGap(62, 62, 62)
+                                .addComponent(comboBoxProjetos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblStatus, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(comboBoxStatus, 0, 107, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblDescricaoTarefa))
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDataInicio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblDataInicio)
-                            .addComponent(lblDataFim)))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
-                .addContainerGap(20, Short.MAX_VALUE))
+                            .addComponent(lblDataFim)
+                            .addComponent(txtDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lblDescricaoTarefa)
+                                        .addGap(118, 118, 118))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnCriaDependencia)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(txtDataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblDataFim)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDataFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblDescricaoTarefa)
-                            .addComponent(lblProjetos)
-                            .addComponent(lblDataInicio))
+                            .addComponent(lblDataInicio)
+                            .addComponent(lblDataInicio1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblProjetos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboBoxProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblDescricaoTarefa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(comboBoxProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(comboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(btnCriaDependencia, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -189,25 +239,67 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtDataFimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataFimActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDataFimActionPerformed
-
     private void comboBoxStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxStatusActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxStatusActionPerformed
-
-    private void txtDataInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDataInicioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDataInicioActionPerformed
 
     private void comboBoxProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxProjetosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboBoxProjetosActionPerformed
 
+    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodigoActionPerformed
+
+    private void txtDtInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDtInicioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDtInicioActionPerformed
+
+    private void btnCriaDependenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriaDependenciaActionPerformed
+        int linhaSelecionada = tabelaTarefas.getSelectedRow();
+        Tarefa t = new Tarefa();
+        t.setID_PROJETO(Integer.parseInt(tabelaTarefas.getValueAt(linhaSelecionada, 0).toString()));
+        t.setID(Integer.parseInt(tabelaTarefas.getValueAt(linhaSelecionada, 1).toString()));
+        t.setDESCRICAO(tabelaTarefas.getValueAt(linhaSelecionada, 2).toString());
+        t.setDT_INICIO( (Date) tabelaTarefas.getValueAt(linhaSelecionada, 3));
+        t.setDT_FIM( (Date) tabelaTarefas.getValueAt(linhaSelecionada, 4));        
+        
+        AtribuirDependencia janelaAtribuir = new AtribuirDependencia(t, comboBoxProjetos.getSelectedItem().toString(), daoTarefa);
+        janelaAtribuir.getContentPane().setBackground(Color.white);
+        janelaAtribuir.setLocationRelativeTo(null);
+        janelaAtribuir.setVisible(true);
+    }//GEN-LAST:event_btnCriaDependenciaActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        atualizaTabela();
+    }//GEN-LAST:event_formWindowActivated
+
+    
+    private void atualizaTabela() {
+        try {
+            DefaultTableModel model =(DefaultTableModel) tabelaTarefas.getModel();
+            //tabelaColaborador.clearSelection();
+            model.setNumRows(0);           ///Limpando a tabela
+            List<Tarefa> tarefas = daoTarefa.listaTodos();
+            for(int i = 0; i < tarefas.size(); i++){
+                model.addRow(new Object[]{
+                    tarefas.get(i).getID_PROJETO(),
+                    tarefas.get(i).getID(),
+                    tarefas.get(i).getDESCRICAO(),
+                    tarefas.get(i).getDT_INICIO(),
+                    tarefas.get(i).getDT_FIM(),
+                    tarefas.get(i).getSTATUS()
+                    
+                });
+            }
+        } catch (Exception erro) {
+            erro.printStackTrace();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCriaDependencia;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnGravar;
     private javax.swing.JButton btnNovo;
@@ -217,12 +309,14 @@ public class CadastrarTarefa extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblDataFim;
     private javax.swing.JLabel lblDataInicio;
+    private javax.swing.JLabel lblDataInicio1;
     private javax.swing.JLabel lblDescricaoTarefa;
     private javax.swing.JLabel lblProjetos;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JTable tabelaTarefas;
     private javax.swing.JTextArea txtAreaDescricao;
-    private javax.swing.JTextField txtDataFim;
-    private javax.swing.JTextField txtDataInicio;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JFormattedTextField txtDtFim;
+    private javax.swing.JFormattedTextField txtDtInicio;
     // End of variables declaration//GEN-END:variables
 }
