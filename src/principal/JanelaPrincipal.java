@@ -141,7 +141,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
     private void mnTarefasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnTarefasActionPerformed
         try {
             TarefaDAO dao = new TarefaDAOJDBC();
-            CadastrarTarefa cadProjeto = new CadastrarTarefa(dao);
+            ProjetoDAO daoProj = new ProjetoDAOJDBC();
+            CadastrarTarefa cadProjeto = new CadastrarTarefa(dao, daoProj);
             cadProjeto.getContentPane().setBackground(Color.white);
             cadProjeto.setLocationRelativeTo(null);
             cadProjeto.setVisible(true);

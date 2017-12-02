@@ -1,18 +1,27 @@
 package principal;
 
 import java.awt.Color;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class CadastrarTarefa extends javax.swing.JFrame {
     private final TarefaDAO daoTarefa;
+    private final ProjetoDAO daoProjeto;
     private Boolean fNovo = false;
     
-    public CadastrarTarefa(TarefaDAO daoTarefa) {
-        this.daoTarefa = daoTarefa;  
+    public CadastrarTarefa(TarefaDAO daoTarefa, ProjetoDAO daoProjeto) {
+        this.daoTarefa = daoTarefa; 
+        this.daoProjeto = daoProjeto;        
         initComponents();
-        comboBoxProjetos.addItem("3");
+        
+        comboBoxStatus.addItem("Pendente");
+        comboBoxStatus.addItem("Iniciado");
+        comboBoxStatus.addItem("Finalizado");
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -38,6 +47,7 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         txtDtFim = new javax.swing.JFormattedTextField();
         txtDtInicio = new javax.swing.JFormattedTextField();
         btnCriaDependencia = new javax.swing.JButton();
+        btnAtribuiColaborador = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Tarefas");
@@ -99,8 +109,18 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         }
 
         btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
 
         btnGravar.setText("Gravar");
+        btnGravar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGravarActionPerformed(evt);
+            }
+        });
 
         btnExcluir.setText("Excluir");
 
@@ -147,6 +167,13 @@ public class CadastrarTarefa extends javax.swing.JFrame {
             }
         });
 
+        btnAtribuiColaborador.setText("Atribuir Colaborador");
+        btnAtribuiColaborador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtribuiColaboradorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -181,37 +208,40 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblDataFim)
-                            .addComponent(txtDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(lblDescricaoTarefa)
+                                            .addGap(118, 118, 118))
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(lblDescricaoTarefa)
-                                        .addGap(118, 118, 118))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnCriaDependencia)))))
+                                    .addComponent(btnAtribuiColaborador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnCriaDependencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblDataFim)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblDataInicio)
-                            .addComponent(lblDataInicio1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblDataFim)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lblDataInicio)
+                                    .addComponent(lblDataInicio1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtDtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblProjetos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(comboBoxProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -220,11 +250,17 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(comboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblDescricaoTarefa)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(btnCriaDependencia, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE))))
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblDescricaoTarefa)
+                            .addComponent(btnCriaDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addComponent(btnAtribuiColaborador, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
@@ -272,7 +308,77 @@ public class CadastrarTarefa extends javax.swing.JFrame {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         atualizaTabela();
+        PreencheComboBox();
     }//GEN-LAST:event_formWindowActivated
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        Integer IDincremento = 1;
+        try {
+            limpaCampos();
+            fNovo = true;
+            IDincremento = daoTarefa.retornaID();        
+            txtCodigo.setEnabled(false);
+            txtCodigo.setText(IDincremento + "");
+            txtDtInicio.grabFocus();
+            
+            btnNovo.setEnabled(false);
+            btnExcluir.setEnabled(false);            
+        } catch (Exception ex) {
+            Logger.getLogger(CadastrarProjeto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
+        try {      
+            if (daoTarefa.verificaColaboradores(Integer.parseInt(txtCodigo.getText()))){
+                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+                Date dataInicio = formato.parse(txtDtInicio.getText());
+                Date dataFim = formato.parse(txtDtFim.getText());
+
+                if (fNovo == true){
+                    Tarefa tarefa = new Tarefa();
+                    tarefa.setID(Integer.parseInt(txtCodigo.getText()));
+                    tarefa.setDT_INICIO(dataInicio);
+                    tarefa.setDT_FIM(dataFim);
+                    tarefa.setDESCRICAO(txtAreaDescricao.getText());
+                    tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
+                    tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
+
+                    daoTarefa.criar(tarefa);    
+                }else{
+                    Tarefa tarefa = new Tarefa();
+                    tarefa.setID(Integer.parseInt(txtCodigo.getText()));
+                    tarefa.setDT_INICIO(dataInicio);
+                    tarefa.setDT_FIM(dataFim);
+                    tarefa.setDESCRICAO(txtAreaDescricao.getText());
+                    tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
+                    tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
+
+                    daoTarefa.alterar(tarefa); 
+                }
+
+                JOptionPane.showMessageDialog(null, "Gravação efetuada com sucesso!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
+                fNovo = false;
+                btnNovo.setEnabled(true);
+                btnExcluir.setEnabled(true);
+                txtCodigo.setEnabled(true);
+                limpaCampos();
+                atualizaTabela();    
+           }else{
+                JOptionPane.showMessageDialog(null, "Para gravação é necessário atribuir pelo menos 1 colaborador!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
+           }    
+        } catch (Exception erro) {
+            erro.printStackTrace();
+        }
+    }//GEN-LAST:event_btnGravarActionPerformed
+
+    private void btnAtribuiColaboradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtribuiColaboradorActionPerformed
+       
+        AtribuiColaborador janelaAtribuirCola = new AtribuiColaborador(txtCodigo.getText(), daoTarefa);
+        janelaAtribuirCola.getContentPane().setBackground(Color.white);
+        janelaAtribuirCola.setLocationRelativeTo(null);
+        janelaAtribuirCola.setVisible(true);
+    }//GEN-LAST:event_btnAtribuiColaboradorActionPerformed
 
     
     private void atualizaTabela() {
@@ -297,7 +403,28 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         }
     }
 
+    private void PreencheComboBox(){
+        try {
+            comboBoxProjetos.removeAllItems();
+            List<Projeto> projetos = daoProjeto.listaTodos();
+            for(int i = 0; i < projetos.size(); i++){
+                comboBoxProjetos.addItem(projetos.get(i).getID() + "");
+            }
+        } catch (Exception erro) {
+            erro.printStackTrace();
+        }
+    }
+    
+    private void limpaCampos() {
+        txtCodigo.setText("");
+        txtDtInicio.setText("");
+        txtDtFim.setText("");
+        txtAreaDescricao.setText("");
+        comboBoxStatus.setSelectedIndex(0);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAtribuiColaborador;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCriaDependencia;
     private javax.swing.JButton btnExcluir;
@@ -319,4 +446,6 @@ public class CadastrarTarefa extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField txtDtFim;
     private javax.swing.JFormattedTextField txtDtInicio;
     // End of variables declaration//GEN-END:variables
+
+    
 }

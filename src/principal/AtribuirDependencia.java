@@ -13,8 +13,7 @@ public class AtribuirDependencia extends javax.swing.JFrame {
         this.tarefa = tarefa;
         this.daoTarefa = dao;
         
-        initComponents();
-        
+        initComponents();        
     }
 
     @SuppressWarnings("unchecked")
