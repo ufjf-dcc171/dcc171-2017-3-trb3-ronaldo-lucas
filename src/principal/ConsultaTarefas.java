@@ -12,6 +12,13 @@ public class ConsultaTarefas extends javax.swing.JFrame {
     public ConsultaTarefas(TarefaDAO dao) {
         this.daoTarefa = dao;
         initComponents();
+        
+        tabelaConsulta.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tabelaConsulta.getColumnModel().getColumn(1).setPreferredWidth(40); 
+        tabelaConsulta.getColumnModel().getColumn(2).setPreferredWidth(250);
+        tabelaConsulta.getColumnModel().getColumn(3).setPreferredWidth(80);
+        tabelaConsulta.getColumnModel().getColumn(4).setPreferredWidth(80);
+        tabelaConsulta.getColumnModel().getColumn(5).setPreferredWidth(80);
     }
 
     @SuppressWarnings("unchecked")
@@ -28,7 +35,8 @@ public class ConsultaTarefas extends javax.swing.JFrame {
         tabelaConsulta = new javax.swing.JTable();
         btnFechar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Consulta de Tarefas");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -39,18 +47,38 @@ public class ConsultaTarefas extends javax.swing.JFrame {
         buttonGroup1.add(rdTodas);
         rdTodas.setSelected(true);
         rdTodas.setText("Todas");
+        rdTodas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdTodasActionPerformed(evt);
+            }
+        });
 
         rdConcluidas.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroup1.add(rdConcluidas);
         rdConcluidas.setText("Concluídas");
+        rdConcluidas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdConcluidasActionPerformed(evt);
+            }
+        });
 
         rdAFazer.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroup1.add(rdAFazer);
         rdAFazer.setText("A Fazer");
+        rdAFazer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdAFazerActionPerformed(evt);
+            }
+        });
 
         rdIniciar.setBackground(new java.awt.Color(255, 255, 255));
         buttonGroup1.add(rdIniciar);
         rdIniciar.setText("Possiveis de iniciar");
+        rdIniciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdIniciarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("Consulta tarefas");
@@ -69,34 +97,38 @@ public class ConsultaTarefas extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tabelaConsulta);
 
         btnFechar.setText("Fechar");
+        btnFechar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFecharActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(rdTodas)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rdConcluidas)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rdAFazer)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(rdIniciar)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 651, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(btnFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(rdTodas)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(rdConcluidas)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(rdAFazer)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rdIniciar))
+                            .addComponent(jLabel1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 651, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,12 +157,42 @@ public class ConsultaTarefas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowActivated
 
+    private void rdTodasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdTodasActionPerformed
+        atualizaTabela();
+    }//GEN-LAST:event_rdTodasActionPerformed
+
+    private void rdConcluidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdConcluidasActionPerformed
+        atualizaTabela();
+    }//GEN-LAST:event_rdConcluidasActionPerformed
+
+    private void rdAFazerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdAFazerActionPerformed
+        atualizaTabela();
+    }//GEN-LAST:event_rdAFazerActionPerformed
+
+    private void rdIniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdIniciarActionPerformed
+        atualizaTabela();
+    }//GEN-LAST:event_rdIniciarActionPerformed
+
+    private void btnFecharActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnFecharActionPerformed
+
     private void atualizaTabela() {
         try {
             DefaultTableModel model =(DefaultTableModel) tabelaConsulta.getModel();
             //tabelaColaborador.clearSelection();
             model.setNumRows(0);           ///Limpando a tabela
-            List<Tarefa> tarefas = daoTarefa.listaTodos();
+            List<Tarefa> tarefas = null;
+            if(rdTodas.isSelected()){
+                tarefas = daoTarefa.listaTodos();    
+            }else if(rdIniciar.isSelected()){
+                tarefas = daoTarefa.listaPodeIniciar(); 
+            }else if(rdAFazer.isSelected()){
+                tarefas = daoTarefa.listaAFazer(); 
+            }else if(rdConcluidas.isSelected()){
+                tarefas = daoTarefa.listaFinalizadas(); 
+            }
+            
             for(int i = 0; i < tarefas.size(); i++){
                 Date dt1 = tarefas.get(i).getDT_INICIO();
                 Date dt2 = tarefas.get(i).getDT_FIM();
@@ -151,6 +213,7 @@ public class ConsultaTarefas extends javax.swing.JFrame {
             erro.printStackTrace();
         }
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFechar;

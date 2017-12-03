@@ -212,43 +212,43 @@
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="6" rowCount="1">
-                <Column editable="false" title="ID DO PROJETO" type="java.lang.Integer"/>
-                <Column editable="false" title="ID DA TAREFA" type="java.lang.Integer"/>
-                <Column editable="false" title="DESCRICAO" type="java.lang.String"/>
-                <Column editable="false" title="DATA INICIO" type="java.lang.String"/>
-                <Column editable="false" title="DATA FIM" type="java.lang.String"/>
+                <Column editable="false" title="ID" type="java.lang.Integer"/>
+                <Column editable="false" title="ID PROJ" type="java.lang.Integer"/>
+                <Column editable="false" title="DESCR" type="java.lang.String"/>
+                <Column editable="false" title="DT INICIO" type="java.lang.String"/>
+                <Column editable="false" title="DT FIM" type="java.lang.String"/>
                 <Column editable="false" title="STATUS" type="java.lang.String"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title value="ID DO PROJETO"/>
+                  <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title value="ID DA TAREFA"/>
+                  <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title value="DESCRICAO"/>
+                  <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title value="DATA INICIO"/>
+                  <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title value="DATA FIM"/>
+                  <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title value="STATUS"/>
+                  <Title/>
                   <Editor/>
                   <Renderer/>
                 </Column>
@@ -307,17 +307,11 @@
           <Color id="Cursor Padr&#xe3;o"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboBoxStatusActionPerformed"/>
-      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JTextField" name="txtCodigo">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodigoActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblDataInicio1">
       <Properties>
@@ -337,13 +331,11 @@
           <Format format="##/##/####" subtype="-1" type="5"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtDtInicioActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnCriaDependencia">
       <Properties>
         <Property name="text" type="java.lang.String" value="Criar Dependencia"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCriaDependenciaActionPerformed"/>
@@ -352,6 +344,7 @@
     <Component class="javax.swing.JButton" name="btnAtribuiColaborador">
       <Properties>
         <Property name="text" type="java.lang.String" value="Atribuir Colaborador"/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAtribuiColaboradorActionPerformed"/>

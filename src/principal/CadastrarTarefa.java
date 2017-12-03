@@ -21,7 +21,14 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         
         comboBoxStatus.addItem("Pendente");
         comboBoxStatus.addItem("Iniciado");
-        comboBoxStatus.addItem("Finalizado");
+        comboBoxStatus.addItem("Finalizada");
+        
+        tabelaTarefas.getColumnModel().getColumn(0).setPreferredWidth(40);
+        tabelaTarefas.getColumnModel().getColumn(1).setPreferredWidth(40); 
+        tabelaTarefas.getColumnModel().getColumn(2).setPreferredWidth(250);
+        tabelaTarefas.getColumnModel().getColumn(3).setPreferredWidth(80);
+        tabelaTarefas.getColumnModel().getColumn(3).setPreferredWidth(80);
+        tabelaTarefas.getColumnModel().getColumn(3).setPreferredWidth(80);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -80,7 +87,7 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "ID DO PROJETO", "ID DA TAREFA", "DESCRICAO", "DATA INICIO", "DATA FIM", "STATUS"
+                "ID", "ID PROJ", "DESCR", "DT INICIO", "DT FIM", "STATUS"
             }
         ) {
             Class[] types = new Class [] {
@@ -104,14 +111,6 @@ public class CadastrarTarefa extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(tabelaTarefas);
-        if (tabelaTarefas.getColumnModel().getColumnCount() > 0) {
-            tabelaTarefas.getColumnModel().getColumn(0).setHeaderValue("ID DO PROJETO");
-            tabelaTarefas.getColumnModel().getColumn(1).setHeaderValue("ID DA TAREFA");
-            tabelaTarefas.getColumnModel().getColumn(2).setHeaderValue("DESCRICAO");
-            tabelaTarefas.getColumnModel().getColumn(3).setHeaderValue("DATA INICIO");
-            tabelaTarefas.getColumnModel().getColumn(4).setHeaderValue("DATA FIM");
-            tabelaTarefas.getColumnModel().getColumn(5).setHeaderValue("STATUS");
-        }
 
         btnNovo.setText("Novo");
         btnNovo.addActionListener(new java.awt.event.ActionListener() {
@@ -139,17 +138,6 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         lblStatus.setText("Status da tarefa");
 
         comboBoxStatus.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        comboBoxStatus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBoxStatusActionPerformed(evt);
-            }
-        });
-
-        txtCodigo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCodigoActionPerformed(evt);
-            }
-        });
 
         lblDataInicio1.setText("Código");
 
@@ -164,13 +152,9 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
-        txtDtInicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtDtInicioActionPerformed(evt);
-            }
-        });
 
         btnCriaDependencia.setText("Criar Dependencia");
+        btnCriaDependencia.setEnabled(false);
         btnCriaDependencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCriaDependenciaActionPerformed(evt);
@@ -178,6 +162,7 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         });
 
         btnAtribuiColaborador.setText("Atribuir Colaborador");
+        btnAtribuiColaborador.setEnabled(false);
         btnAtribuiColaborador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAtribuiColaboradorActionPerformed(evt);
@@ -285,35 +270,37 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void comboBoxStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxStatusActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBoxStatusActionPerformed
-
     private void comboBoxProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxProjetosActionPerformed
-        // TODO add your handling code here:
+        atualizaTabelaProjeto();
     }//GEN-LAST:event_comboBoxProjetosActionPerformed
 
-    private void txtCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCodigoActionPerformed
-
-    private void txtDtInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDtInicioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDtInicioActionPerformed
-
     private void btnCriaDependenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriaDependenciaActionPerformed
-        int linhaSelecionada = tabelaTarefas.getSelectedRow();
-        Tarefa t = new Tarefa();
-        t.setID_PROJETO(Integer.parseInt(tabelaTarefas.getValueAt(linhaSelecionada, 0).toString()));
-        t.setID(Integer.parseInt(tabelaTarefas.getValueAt(linhaSelecionada, 1).toString()));
-        t.setDESCRICAO(tabelaTarefas.getValueAt(linhaSelecionada, 2).toString());
-        t.setDT_INICIO( (Date) tabelaTarefas.getValueAt(linhaSelecionada, 3));
-        t.setDT_FIM( (Date) tabelaTarefas.getValueAt(linhaSelecionada, 4));        
-        
-        AtribuirDependencia janelaAtribuir = new AtribuirDependencia(t, comboBoxProjetos.getSelectedItem().toString(), daoTarefa);
-        janelaAtribuir.getContentPane().setBackground(Color.white);
-        janelaAtribuir.setLocationRelativeTo(null);
-        janelaAtribuir.setVisible(true);
+        try {
+            if (fNovo == false){            
+                List<Tarefa> tarefas = daoTarefa.listaUnico(txtCodigo.getText());
+                
+                Tarefa t = new Tarefa();
+                t.setID(tarefas.get(0).getID());
+                t.setID_PROJETO(tarefas.get(0).getID_PROJETO());                
+                t.setDESCRICAO(tarefas.get(0).getDESCRICAO());
+                t.setDT_INICIO(tarefas.get(0).getDT_INICIO());
+                t.setDT_FIM( tarefas.get(0).getDT_FIM()); 
+
+                comboBoxStatus.setSelectedItem(tarefas.get(0).getSTATUS());
+                txtCodigo.setEnabled(false);    
+                comboBoxProjetos.setEnabled(false);
+                btnCriaDependencia.setEnabled(true);
+                btnAtribuiColaborador.setEnabled(true);
+
+                //Abre tela
+                AtribuirDependencia janelaAtribuir = new AtribuirDependencia(t, comboBoxProjetos.getSelectedItem().toString(), daoTarefa);
+                janelaAtribuir.getContentPane().setBackground(Color.white);
+                janelaAtribuir.setLocationRelativeTo(null);
+                janelaAtribuir.setVisible(true);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(CadastrarTarefa.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnCriaDependenciaActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -402,7 +389,7 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                         return;
                     }
                     int linhaSelecionada = tabelaTarefas.getSelectedRow();
-                    List<Tarefa> tarefas = daoTarefa.listaUnico(tabelaTarefas.getValueAt(linhaSelecionada, 1).toString());
+                    List<Tarefa> tarefas = daoTarefa.listaUnico(tabelaTarefas.getValueAt(linhaSelecionada, 0).toString());
                     
                     Date dt1 = tarefas.get(0).getDT_INICIO();
                     Date dt2 = tarefas.get(0).getDT_FIM();
@@ -468,8 +455,8 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                 String dtFim = new SimpleDateFormat("dd/MM/yyyy").format(dt2);
             
                 model.addRow(new Object[]{
-                    tarefas.get(i).getID_PROJETO(),
                     tarefas.get(i).getID(),
+                    tarefas.get(i).getID_PROJETO(),                    
                     tarefas.get(i).getDESCRICAO(),
                     dtInicio,
                     dtFim,
@@ -482,6 +469,33 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         }
     }
 
+    private void atualizaTabelaProjeto() {
+        try {
+            DefaultTableModel model =(DefaultTableModel) tabelaTarefas.getModel();
+            //tabelaColaborador.clearSelection();
+            model.setNumRows(0);           ///Limpando a tabela
+            List<Tarefa> tarefas = daoTarefa.listaTodosProjeto((String) comboBoxProjetos.getSelectedItem());
+            for(int i = 0; i < tarefas.size(); i++){
+                Date dt1 = tarefas.get(i).getDT_INICIO();
+                Date dt2 = tarefas.get(i).getDT_FIM();
+                String dtInicio = new SimpleDateFormat("dd/MM/yyyy").format(dt1);
+                String dtFim = new SimpleDateFormat("dd/MM/yyyy").format(dt2);
+            
+                model.addRow(new Object[]{
+                    tarefas.get(i).getID(),
+                    tarefas.get(i).getID_PROJETO(),                    
+                    tarefas.get(i).getDESCRICAO(),
+                    dtInicio,
+                    dtFim,
+                    tarefas.get(i).getSTATUS()
+                    
+                });
+            }
+        } catch (Exception erro) {
+            erro.printStackTrace();
+        }
+    }
+    
     private void PreencheComboBox(){
         try {
             comboBoxProjetos.removeAllItems();

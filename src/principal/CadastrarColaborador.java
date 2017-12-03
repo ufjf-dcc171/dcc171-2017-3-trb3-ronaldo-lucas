@@ -15,6 +15,9 @@ public final class CadastrarColaborador extends javax.swing.JFrame {
           
         //atualizarTabela();        
         initComponents();
+        tabelaColaborador.getColumnModel().getColumn(0).setPreferredWidth(30);
+        tabelaColaborador.getColumnModel().getColumn(1).setPreferredWidth(150); 
+        tabelaColaborador.getColumnModel().getColumn(2).setPreferredWidth(250);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

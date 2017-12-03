@@ -13,6 +13,10 @@ public class TarefaDAOJDBC implements TarefaDAO{
     private final PreparedStatement comandoExclui;
     private final PreparedStatement comandoAltera;
     private final PreparedStatement comandoListarTodos;
+    private final PreparedStatement comandoListarTodosProjeto;
+    private final PreparedStatement comandoListarAFazer;
+    private final PreparedStatement comandoListarPodeIniciar;
+    private final PreparedStatement comandoListarFinalizadas;
     private final PreparedStatement comandoListarDependentes;
     private final PreparedStatement comandoListarColaboradores;
     private final PreparedStatement comandoSeleciona;
@@ -29,13 +33,17 @@ public class TarefaDAOJDBC implements TarefaDAO{
         comandoExclui = conexao.prepareStatement("Delete From TAREFAS Where ID = ?");
         comandoAltera = conexao.prepareStatement("Update TAREFAS set descricao = ?, dt_inicio = ?, dt_fim = ?, status = ? where id = ?");
         comandoListarTodos = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS");
+        comandoListarTodosProjeto = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where id_projeto = ? order by id_projeto, id");
+        comandoListarAFazer = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where status = 'Pendente' order by id_projeto, id");
+        comandoListarPodeIniciar = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where id not in (select id_tarefa from LISTA_TAREFAS) order by id_projeto, id");
+        comandoListarFinalizadas = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where status = 'Finalizada' order by id_projeto, id");
         comandoListaUnico = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where id = ?");
         comandoListarDependentes = conexao.prepareStatement("SELECT * FROM LISTA_TAREFAS Where id_tarefa = ?");
         comandoVerificaColaboradores = conexao.prepareStatement("SELECT * FROM TAREFA_COLABORADOR WHERE ID_TAREFA = ?");
         comandoListarColaboradores = conexao.prepareStatement("SELECT ID, NOME, EMAIL from COLABORADOR where id not in (select id_colaborador from TAREFA_COLABORADOR where id_tarefa = ?)");
         comandoSeleciona = conexao.prepareStatement("SELECT * FROM TAREFAS");
         comandoAtribuiDependencia = conexao.prepareStatement("INSERT INTO LISTA_TAREFAS(ID_TAREFA, ID_TAREFA_PENDENTE) VALUES (?,?)");
-        comandoListarAtribuiDependencia = conexao.prepareStatement("SELECT T.id, T.descricao, T.dt_inicio, T.dt_fim FROM TAREFAS T JOIN LISTA_TAREFAS LT ON (T.ID = LT.ID_TAREFA) WHERE T.ID_PROJETO = ? AND T.ID <> ? AND T.ID = LT.ID_TAREFA_PENDENTE");
+        comandoListarAtribuiDependencia = conexao.prepareStatement("SELECT id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where id_projeto = ? and id <> ? and id not in (select id_tarefa_pendente from LISTA_TAREFAS)");
     }
 
     @Override
@@ -130,24 +138,22 @@ public class TarefaDAOJDBC implements TarefaDAO{
 
     @Override
     public void atribuirDependencia(Tarefa tarefa, Tarefa tarefaDep) throws Exception {
-        comandoInsere.clearParameters();
-        comandoInsere.setInt(1, tarefa.getID());
-        comandoInsere.setInt(2, tarefaDep.getID());
-        comandoInsere.executeUpdate();
+        comandoAtribuiDependencia.clearParameters();
+        comandoAtribuiDependencia.setInt(1, tarefa.getID());
+        comandoAtribuiDependencia.setInt(2, tarefaDep.getID());
+        comandoAtribuiDependencia.executeUpdate();
     }
 
     @Override
-    public List<Tarefa> listaTodosAtribuicao(Tarefa t) throws Exception {
+    public List<Tarefa> listaTodosAtribuicao(Integer id_tarefa, Integer id_projeto) throws Exception {
         List<Tarefa> tarefas = new ArrayList<>();
         comandoListarAtribuiDependencia.clearParameters();
-        comandoListarAtribuiDependencia.setInt(1, t.getID_PROJETO());
-        comandoListarAtribuiDependencia.setInt(2, t.getID());
-        //comandoListarAtribuiDependencia.executeUpdate();
+        comandoListarAtribuiDependencia.setInt(1, id_projeto);
+        comandoListarAtribuiDependencia.setInt(2, id_tarefa);
         ResultSet resultado = comandoListarAtribuiDependencia.executeQuery();
         while (resultado.next()) {
             Tarefa tarefa = new Tarefa();
             tarefa.setID(resultado.getInt("id"));
-            tarefa.setID_PROJETO(resultado.getInt("id_projeto"));
             tarefa.setDESCRICAO(resultado.getString("descricao"));
             tarefa.setDT_INICIO(resultado.getDate("dt_inicio"));
             tarefa.setDT_FIM(resultado.getDate("dt_fim"));
@@ -162,7 +168,6 @@ public class TarefaDAOJDBC implements TarefaDAO{
         Boolean result = false;
         comandoVerificaColaboradores.clearParameters();
         comandoVerificaColaboradores.setString(1, id_tarefa.toString());
-        //comandoListarColaboradores.executeUpdate();
         ResultSet resultado = comandoVerificaColaboradores.executeQuery();
         while (resultado.next()) {
             result = true;
@@ -182,8 +187,77 @@ public class TarefaDAOJDBC implements TarefaDAO{
     public List<Tarefa> listaUnico(String id_tarefa) throws Exception {
         List<Tarefa> tarefas = new ArrayList<>();
         comandoListaUnico.setString(1, id_tarefa);
-        //comandoListaUnico.executeUpdate();   
         ResultSet resultado = comandoListaUnico.executeQuery();
+        while (resultado.next()) {
+            Tarefa tarefa = new Tarefa();
+            tarefa.setID(resultado.getInt("id"));
+            tarefa.setID_PROJETO(resultado.getInt("id_projeto"));
+            tarefa.setDESCRICAO(resultado.getString("descricao"));
+            tarefa.setDT_INICIO(resultado.getDate("dt_inicio"));
+            tarefa.setDT_FIM(resultado.getDate("dt_fim"));
+            tarefa.setSTATUS(resultado.getString("status"));
+            tarefas.add(tarefa);
+        }
+        return tarefas;
+    }
+
+    @Override
+    public List<Tarefa> listaAFazer() throws Exception {
+        List<Tarefa> tarefas = new ArrayList<>();
+        ResultSet resultado = comandoListarAFazer.executeQuery();
+        while (resultado.next()) {
+            Tarefa tarefa = new Tarefa();
+            tarefa.setID(resultado.getInt("id"));
+            tarefa.setID_PROJETO(resultado.getInt("id_projeto"));
+            tarefa.setDESCRICAO(resultado.getString("descricao"));
+            tarefa.setDT_INICIO(resultado.getDate("dt_inicio"));
+            tarefa.setDT_FIM(resultado.getDate("dt_fim"));
+            tarefa.setSTATUS(resultado.getString("status"));
+            tarefas.add(tarefa);
+        }
+        return tarefas;
+    }
+
+    @Override
+    public List<Tarefa> listaFinalizadas() throws Exception {
+        List<Tarefa> tarefas = new ArrayList<>();
+        ResultSet resultado = comandoListarFinalizadas.executeQuery();
+        while (resultado.next()) {
+            Tarefa tarefa = new Tarefa();
+            tarefa.setID(resultado.getInt("id"));
+            tarefa.setID_PROJETO(resultado.getInt("id_projeto"));
+            tarefa.setDESCRICAO(resultado.getString("descricao"));
+            tarefa.setDT_INICIO(resultado.getDate("dt_inicio"));
+            tarefa.setDT_FIM(resultado.getDate("dt_fim"));
+            tarefa.setSTATUS(resultado.getString("status"));
+            tarefas.add(tarefa);
+        }
+        return tarefas;
+    }
+
+    @Override
+    public List<Tarefa> listaPodeIniciar() throws Exception {
+        List<Tarefa> tarefas = new ArrayList<>();
+        ResultSet resultado = comandoListarPodeIniciar.executeQuery();
+        while (resultado.next()) {
+            Tarefa tarefa = new Tarefa();
+            tarefa.setID(resultado.getInt("id"));
+            tarefa.setID_PROJETO(resultado.getInt("id_projeto"));
+            tarefa.setDESCRICAO(resultado.getString("descricao"));
+            tarefa.setDT_INICIO(resultado.getDate("dt_inicio"));
+            tarefa.setDT_FIM(resultado.getDate("dt_fim"));
+            tarefa.setSTATUS(resultado.getString("status"));
+            tarefas.add(tarefa);
+        }
+        return tarefas;
+    }
+
+    @Override
+    public List<Tarefa> listaTodosProjeto(String id_projeto) throws Exception {
+        List<Tarefa> tarefas = new ArrayList<>();
+        comandoListarTodosProjeto.clearParameters();
+        comandoListarTodosProjeto.setString(1, id_projeto);
+        ResultSet resultado = comandoListarTodosProjeto.executeQuery();
         while (resultado.next()) {
             Tarefa tarefa = new Tarefa();
             tarefa.setID(resultado.getInt("id"));
