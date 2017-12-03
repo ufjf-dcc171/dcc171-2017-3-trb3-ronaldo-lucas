@@ -65,7 +65,7 @@ public class ColaboradorDAOJDBC implements ColaboradorDAO{
 
     @Override
     public Integer retornaID() throws Exception {
-        Integer id = 0;
+        Integer id = 1;
         ResultSet resultado = comandoSeleciona.executeQuery();
         while (resultado.next()) {
             id = resultado.getInt("id") + 1;

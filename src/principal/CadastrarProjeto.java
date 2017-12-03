@@ -249,7 +249,7 @@ public class CadastrarProjeto extends javax.swing.JFrame {
                 daoProjeto.alterar(projeto); 
             }
             
-            JOptionPane.showMessageDialog(null, "Gravação efetuada com sucesso!", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Gravação efetuada com sucesso!", "Erro", JOptionPane.INFORMATION_MESSAGE);
             fNovo = false;
             btnNovo.setEnabled(true);
             btnExcluir.setEnabled(true);
@@ -357,11 +357,16 @@ public class CadastrarProjeto extends javax.swing.JFrame {
             model.setNumRows(0);           ///Limpando a tabela
             List<Projeto> projetos = daoProjeto.listaTodos();
             for(int i = 0; i < projetos.size(); i++){
+                Date dt1 = projetos.get(i).getDT_INICIO();
+                Date dt2 = projetos.get(i).getDT_FIM();
+                String dtInicio = new SimpleDateFormat("dd/MM/yyyy").format(dt1);
+                String dtFim = new SimpleDateFormat("dd/MM/yyyy").format(dt2);
+                
                 model.addRow(new Object[]{
                     projetos.get(i).getID(),
                     projetos.get(i).getDESCRICAO(),
-                    projetos.get(i).getDT_INICIO(),
-                    projetos.get(i).getDT_FIM()
+                    dtInicio,
+                    dtFim
                 });
             }
         } catch (Exception erro) {

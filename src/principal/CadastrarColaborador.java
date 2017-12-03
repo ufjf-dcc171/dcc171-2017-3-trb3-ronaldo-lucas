@@ -205,7 +205,7 @@ public final class CadastrarColaborador extends javax.swing.JFrame {
                 daoColaborador.alterar(c); 
             }
             
-            System.out.println("Gravação efetuada com sucesso!");
+            JOptionPane.showMessageDialog(null, "Gravação efetuada com sucesso!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
             fNovo = false;
             btnNovo.setEnabled(true);
             btnExcluir.setEnabled(true);
@@ -230,7 +230,7 @@ public final class CadastrarColaborador extends javax.swing.JFrame {
                         Colaborador c = new Colaborador();
                         c.setID(Integer.parseInt(txtCod.getText()));
                         daoColaborador.excluir(c);
-                        System.out.println("Exclusão efetuada com sucesso!");
+                        JOptionPane.showMessageDialog(null, "Exclusão efetuada com sucesso!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
 
                         btnNovo.setEnabled(true);
                         btnExcluir.setEnabled(true);

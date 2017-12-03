@@ -36,15 +36,18 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="mnMovimento">
+        <Menu class="javax.swing.JMenu" name="mnConsultas">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Movimento"/>
+            <Property name="text" type="java.lang.String" value="Consultas"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mnIniciaFinalizaTarefa">
+            <MenuItem class="javax.swing.JMenuItem" name="mnConsTarefa">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Iniciar/Finalizar Tarefa"/>
+                <Property name="text" type="java.lang.String" value="Tarefas"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnConsTarefaActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

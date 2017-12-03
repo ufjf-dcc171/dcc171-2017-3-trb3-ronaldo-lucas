@@ -98,6 +98,11 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        tabelaTarefas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaTarefasMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tabelaTarefas);
         if (tabelaTarefas.getColumnModel().getColumnCount() > 0) {
             tabelaTarefas.getColumnModel().getColumn(0).setHeaderValue("ID DO PROJETO");
@@ -322,63 +327,99 @@ public class CadastrarTarefa extends javax.swing.JFrame {
             txtDtInicio.grabFocus();
             
             btnNovo.setEnabled(false);
-            btnExcluir.setEnabled(false);            
+            btnExcluir.setEnabled(false);  
+            btnCriaDependencia.setEnabled(false);
+            btnAtribuiColaborador.setEnabled(false);
+            comboBoxProjetos.setEnabled(true);
         } catch (Exception ex) {
             Logger.getLogger(CadastrarProjeto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
-        try {      
-            if (daoTarefa.verificaColaboradores(Integer.parseInt(txtCodigo.getText()))){
-                SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-                Date dataInicio = formato.parse(txtDtInicio.getText());
-                Date dataFim = formato.parse(txtDtFim.getText());
+        try {
+            String dtInicio = txtDtInicio.getText();
+            String dtFim = txtDtFim.getText();
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            
+            
+            if (fNovo == true){
+                Tarefa tarefa = new Tarefa();
+                tarefa.setID(Integer.parseInt(txtCodigo.getText()));
+                tarefa.setDT_INICIO(format.parse(dtInicio));
+                tarefa.setDT_FIM(format.parse(dtFim));
+                tarefa.setDESCRICAO(txtAreaDescricao.getText());
+                tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
+                tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
 
-                if (fNovo == true){
-                    Tarefa tarefa = new Tarefa();
-                    tarefa.setID(Integer.parseInt(txtCodigo.getText()));
-                    tarefa.setDT_INICIO(dataInicio);
-                    tarefa.setDT_FIM(dataFim);
-                    tarefa.setDESCRICAO(txtAreaDescricao.getText());
-                    tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
-                    tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
+                daoTarefa.criar(tarefa);    
+            }else{
+                Tarefa tarefa = new Tarefa();
+                tarefa.setID(Integer.parseInt(txtCodigo.getText()));
+                tarefa.setDT_INICIO(format.parse(dtInicio));
+                tarefa.setDT_FIM(format.parse(dtFim));
+                tarefa.setDESCRICAO(txtAreaDescricao.getText());
+                tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
+                tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
 
-                    daoTarefa.criar(tarefa);    
-                }else{
-                    Tarefa tarefa = new Tarefa();
-                    tarefa.setID(Integer.parseInt(txtCodigo.getText()));
-                    tarefa.setDT_INICIO(dataInicio);
-                    tarefa.setDT_FIM(dataFim);
-                    tarefa.setDESCRICAO(txtAreaDescricao.getText());
-                    tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
-                    tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
+                daoTarefa.alterar(tarefa); 
+            }
 
-                    daoTarefa.alterar(tarefa); 
-                }
-
-                JOptionPane.showMessageDialog(null, "Gravação efetuada com sucesso!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
-                fNovo = false;
-                btnNovo.setEnabled(true);
-                btnExcluir.setEnabled(true);
-                txtCodigo.setEnabled(true);
-                limpaCampos();
-                atualizaTabela();    
-           }else{
-                JOptionPane.showMessageDialog(null, "Para gravação é necessário atribuir pelo menos 1 colaborador!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
-           }    
+            JOptionPane.showMessageDialog(null, "Gravação efetuada com sucesso!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
+            fNovo = false;
+            btnNovo.setEnabled(true);
+            btnExcluir.setEnabled(true);
+            txtCodigo.setEnabled(true);
+            comboBoxProjetos.setEnabled(true);
+            limpaCampos();
+            atualizaTabela(); 
         } catch (Exception erro) {
             erro.printStackTrace();
         }
     }//GEN-LAST:event_btnGravarActionPerformed
 
     private void btnAtribuiColaboradorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtribuiColaboradorActionPerformed
-       
-        AtribuiColaborador janelaAtribuirCola = new AtribuiColaborador(txtCodigo.getText(), daoTarefa);
-        janelaAtribuirCola.getContentPane().setBackground(Color.white);
-        janelaAtribuirCola.setLocationRelativeTo(null);
-        janelaAtribuirCola.setVisible(true);
+        if (txtCodigo.getText() != ""){
+            AtribuiColaborador janelaAtribuirCola = new AtribuiColaborador(txtCodigo.getText(), daoTarefa);
+            janelaAtribuirCola.getContentPane().setBackground(Color.white);
+            janelaAtribuirCola.setLocationRelativeTo(null);
+            janelaAtribuirCola.setVisible(true);    
+        }else{
+            JOptionPane.showMessageDialog(null, "Você deve selecionar uma tarefa para atribuir um colaborador!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
+        }        
     }//GEN-LAST:event_btnAtribuiColaboradorActionPerformed
+
+    private void tabelaTarefasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaTarefasMouseClicked
+        try {
+            if(evt.getClickCount() == 2){
+                if (fNovo == false){
+                    if (tabelaTarefas.getSelectedRowCount() == 0) {
+                        return;
+                    }
+                    int linhaSelecionada = tabelaTarefas.getSelectedRow();
+                    List<Tarefa> tarefas = daoTarefa.listaUnico(tabelaTarefas.getValueAt(linhaSelecionada, 1).toString());
+                    
+                    Date dt1 = tarefas.get(0).getDT_INICIO();
+                    Date dt2 = tarefas.get(0).getDT_FIM();
+                    String dtInicio = new SimpleDateFormat("dd/MM/yyyy").format(dt1);
+                    String dtFim = new SimpleDateFormat("dd/MM/yyyy").format(dt2);
+                    
+                    txtCodigo.setText(tarefas.get(0).getID() + "");
+                    comboBoxProjetos.setSelectedItem(tarefas.get(0).getID_PROJETO());
+                    txtAreaDescricao.setText(tarefas.get(0).getDESCRICAO());
+                    txtDtInicio.setText(dtInicio);
+                    txtDtFim.setText(dtFim);
+                    comboBoxStatus.setSelectedItem(tarefas.get(0).getSTATUS());
+                    txtCodigo.setEnabled(false);    
+                    comboBoxProjetos.setEnabled(false);
+                    btnCriaDependencia.setEnabled(true);
+                    btnAtribuiColaborador.setEnabled(true);
+                }
+            }
+        } catch (Exception erro) {
+            erro.printStackTrace();
+        }
+    }//GEN-LAST:event_tabelaTarefasMouseClicked
 
     
     private void atualizaTabela() {
@@ -388,12 +429,17 @@ public class CadastrarTarefa extends javax.swing.JFrame {
             model.setNumRows(0);           ///Limpando a tabela
             List<Tarefa> tarefas = daoTarefa.listaTodos();
             for(int i = 0; i < tarefas.size(); i++){
+                Date dt1 = tarefas.get(i).getDT_INICIO();
+                Date dt2 = tarefas.get(i).getDT_FIM();
+                String dtInicio = new SimpleDateFormat("dd/MM/yyyy").format(dt1);
+                String dtFim = new SimpleDateFormat("dd/MM/yyyy").format(dt2);
+            
                 model.addRow(new Object[]{
                     tarefas.get(i).getID_PROJETO(),
                     tarefas.get(i).getID(),
                     tarefas.get(i).getDESCRICAO(),
-                    tarefas.get(i).getDT_INICIO(),
-                    tarefas.get(i).getDT_FIM(),
+                    dtInicio,
+                    dtFim,
                     tarefas.get(i).getSTATUS()
                     
                 });

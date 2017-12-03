@@ -21,8 +21,8 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         mnColaborador = new javax.swing.JMenuItem();
         mnProjetos = new javax.swing.JMenuItem();
         mnTarefas = new javax.swing.JMenuItem();
-        mnMovimento = new javax.swing.JMenu();
-        mnIniciaFinalizaTarefa = new javax.swing.JMenuItem();
+        mnConsultas = new javax.swing.JMenu();
+        mnConsTarefa = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Gerenciamento de Projetos");
@@ -72,12 +72,17 @@ public class JanelaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(mnCadastro);
 
-        mnMovimento.setText("Movimento");
+        mnConsultas.setText("Consultas");
 
-        mnIniciaFinalizaTarefa.setText("Iniciar/Finalizar Tarefa");
-        mnMovimento.add(mnIniciaFinalizaTarefa);
+        mnConsTarefa.setText("Tarefas");
+        mnConsTarefa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnConsTarefaActionPerformed(evt);
+            }
+        });
+        mnConsultas.add(mnConsTarefa);
 
-        jMenuBar1.add(mnMovimento);
+        jMenuBar1.add(mnConsultas);
 
         setJMenuBar(jMenuBar1);
 
@@ -151,13 +156,25 @@ public class JanelaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mnTarefasActionPerformed
 
+    private void mnConsTarefaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnConsTarefaActionPerformed
+        try {
+            TarefaDAO dao = new TarefaDAOJDBC();
+            ConsultaTarefas consultaTarefas = new ConsultaTarefas(dao);
+            consultaTarefas.getContentPane().setBackground(Color.white);
+            consultaTarefas.setLocationRelativeTo(null);
+            consultaTarefas.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(JanelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_mnConsTarefaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu mnCadastro;
     private javax.swing.JMenuItem mnColaborador;
-    private javax.swing.JMenuItem mnIniciaFinalizaTarefa;
-    private javax.swing.JMenu mnMovimento;
+    private javax.swing.JMenuItem mnConsTarefa;
+    private javax.swing.JMenu mnConsultas;
     private javax.swing.JMenuItem mnProjetos;
     private javax.swing.JMenuItem mnTarefas;
     // End of variables declaration//GEN-END:variables

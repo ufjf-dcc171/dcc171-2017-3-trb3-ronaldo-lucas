@@ -132,7 +132,7 @@ public class AtribuiColaborador extends javax.swing.JFrame {
             DefaultTableModel model =(DefaultTableModel) tabelaColaborador.getModel();
             //tabelaColaborador.clearSelection();
             model.setNumRows(0);           ///Limpando a tabela
-            List<Colaborador> colaborador = daoTarefa.listaColaboradores();
+            List<Colaborador> colaborador = daoTarefa.listaColaboradores(idTarefa);
             for(int i = 0; i < colaborador.size(); i++){
                 model.addRow(new Object[]{
                     colaborador.get(i).getID(),

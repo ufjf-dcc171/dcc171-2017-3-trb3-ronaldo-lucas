@@ -20,17 +20,19 @@ public class TarefaDAOJDBC implements TarefaDAO{
     private final PreparedStatement comandoListarAtribuiDependencia;
     private final PreparedStatement comandoInsereColaborador;
     private final PreparedStatement comandoVerificaColaboradores;
+    private final PreparedStatement comandoListaUnico;
 
     public TarefaDAOJDBC() throws Exception {
         conexao = ConexaoJavaDB.getConnection();
         comandoInsere = conexao.prepareStatement("Insert Into TAREFAS(id, id_projeto, descricao, dt_inicio, dt_fim, status) VALUES (?,?,?,?,?,?)");
         comandoInsereColaborador = conexao.prepareStatement("Insert Into TAREFA_COLABORADOR(ID_COLABORADOR, ID_TAREFA) VALUES (?,?)");
         comandoExclui = conexao.prepareStatement("Delete From TAREFAS Where ID = ?");
-        comandoAltera = conexao.prepareStatement("Update TAREFAS set descricao = ?, dt_inicio = ?, dt_fim = ? where id = ?");
+        comandoAltera = conexao.prepareStatement("Update TAREFAS set descricao = ?, dt_inicio = ?, dt_fim = ?, status = ? where id = ?");
         comandoListarTodos = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS");
+        comandoListaUnico = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where id = ?");
         comandoListarDependentes = conexao.prepareStatement("SELECT * FROM LISTA_TAREFAS Where id_tarefa = ?");
         comandoVerificaColaboradores = conexao.prepareStatement("SELECT * FROM TAREFA_COLABORADOR WHERE ID_TAREFA = ?");
-        comandoListarColaboradores = conexao.prepareStatement("SELECT ID, NOME, EMAIL from COLABORADOR");
+        comandoListarColaboradores = conexao.prepareStatement("SELECT ID, NOME, EMAIL from COLABORADOR where id not in (select id_colaborador from TAREFA_COLABORADOR where id_tarefa = ?)");
         comandoSeleciona = conexao.prepareStatement("SELECT * FROM TAREFAS");
         comandoAtribuiDependencia = conexao.prepareStatement("INSERT INTO LISTA_TAREFAS(ID_TAREFA, ID_TAREFA_PENDENTE) VALUES (?,?)");
         comandoListarAtribuiDependencia = conexao.prepareStatement("SELECT T.id, T.descricao, T.dt_inicio, T.dt_fim FROM TAREFAS T JOIN LISTA_TAREFAS LT ON (T.ID = LT.ID_TAREFA) WHERE T.ID_PROJETO = ? AND T.ID <> ? AND T.ID = LT.ID_TAREFA_PENDENTE");
@@ -61,13 +63,14 @@ public class TarefaDAOJDBC implements TarefaDAO{
         comandoAltera.setString(1, tarefa.getDESCRICAO());
         comandoAltera.setDate(2, new java.sql.Date (tarefa.getDT_INICIO().getTime()));
         comandoAltera.setDate(3, new java.sql.Date (tarefa.getDT_FIM().getTime()));
-        comandoAltera.setInt(4, tarefa.getID());
+        comandoAltera.setString(4, tarefa.getSTATUS());
+        comandoAltera.setInt(5, tarefa.getID());        
         comandoAltera.executeUpdate();
     }
 
     @Override
     public Integer retornaID() throws Exception {
-        Integer id = 0;
+        Integer id = 1;
         ResultSet resultado = comandoSeleciona.executeQuery();
         while (resultado.next()) {
             id = resultado.getInt("id") + 1;
@@ -110,8 +113,10 @@ public class TarefaDAOJDBC implements TarefaDAO{
     }
 
     @Override
-    public List<Colaborador> listaColaboradores() throws Exception {
-        List<Colaborador> colaboradores = new ArrayList<>();                
+    public List<Colaborador> listaColaboradores(String id_tarefa) throws Exception {
+        List<Colaborador> colaboradores = new ArrayList<>();         
+        comandoListarColaboradores.clearParameters();
+        comandoListarColaboradores.setString(1, id_tarefa);
         ResultSet resultado = comandoListarColaboradores.executeQuery();
         while (resultado.next()) {
             Colaborador c = new Colaborador();                    
@@ -137,7 +142,7 @@ public class TarefaDAOJDBC implements TarefaDAO{
         comandoListarAtribuiDependencia.clearParameters();
         comandoListarAtribuiDependencia.setInt(1, t.getID_PROJETO());
         comandoListarAtribuiDependencia.setInt(2, t.getID());
-        comandoListarAtribuiDependencia.executeUpdate();
+        //comandoListarAtribuiDependencia.executeUpdate();
         ResultSet resultado = comandoListarAtribuiDependencia.executeQuery();
         while (resultado.next()) {
             Tarefa tarefa = new Tarefa();
@@ -171,6 +176,25 @@ public class TarefaDAOJDBC implements TarefaDAO{
         comandoInsereColaborador.setInt(1, colab.getID());
         comandoInsereColaborador.setString(2, id_tarefa);
         comandoInsereColaborador.executeUpdate();    
+    }
+
+    @Override
+    public List<Tarefa> listaUnico(String id_tarefa) throws Exception {
+        List<Tarefa> tarefas = new ArrayList<>();
+        comandoListaUnico.setString(1, id_tarefa);
+        //comandoListaUnico.executeUpdate();   
+        ResultSet resultado = comandoListaUnico.executeQuery();
+        while (resultado.next()) {
+            Tarefa tarefa = new Tarefa();
+            tarefa.setID(resultado.getInt("id"));
+            tarefa.setID_PROJETO(resultado.getInt("id_projeto"));
+            tarefa.setDESCRICAO(resultado.getString("descricao"));
+            tarefa.setDT_INICIO(resultado.getDate("dt_inicio"));
+            tarefa.setDT_FIM(resultado.getDate("dt_fim"));
+            tarefa.setSTATUS(resultado.getString("status"));
+            tarefas.add(tarefa);
+        }
+        return tarefas;
     }
     
 }
