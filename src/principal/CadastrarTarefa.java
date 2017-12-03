@@ -128,6 +128,11 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         });
 
         btnExcluir.setText("Excluir");
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
 
@@ -420,6 +425,34 @@ public class CadastrarTarefa extends javax.swing.JFrame {
             erro.printStackTrace();
         }
     }//GEN-LAST:event_tabelaTarefasMouseClicked
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        try {
+            if (!"".equals(txtCodigo.getText())) {
+                if (fNovo == false){                
+                    int resposta;
+                    resposta = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir?", "", JOptionPane.YES_NO_OPTION);
+
+                    if (resposta == JOptionPane.YES_OPTION) {
+                        Tarefa t = new Tarefa();
+                        t.setID(Integer.parseInt(txtCodigo.getText()));
+                        daoTarefa.excluir(t);
+                        JOptionPane.showMessageDialog(null, "Exclusão efetuada com sucesso!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
+
+                        btnNovo.setEnabled(true);
+                        btnExcluir.setEnabled(true);
+                        txtCodigo.setEnabled(true);
+                        limpaCampos();
+                        atualizaTabela();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecione uma tarefa!!!", "Erro", JOptionPane.ERROR_MESSAGE);
+                }    
+            }                        
+        } catch (Exception erro) {
+            erro.printStackTrace();
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
 
     
     private void atualizaTabela() {
