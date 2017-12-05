@@ -7,6 +7,7 @@ interface TarefaDAO {
     public void criar(Tarefa tarefa) throws Exception;
     public void criarColaborador(Colaborador colab, String id_tarefa) throws Exception;
     public void excluir(Tarefa tarefa) throws Exception;
+    public void excluirListaDependentes(Tarefa tarefa) throws Exception;
     public void alterar(Tarefa tarefa) throws Exception;
     public void atribuirDependencia(Tarefa tarefa, Tarefa tarefaDep) throws Exception;
     public Boolean verificaColaboradores(Integer id_tarefa) throws Exception;

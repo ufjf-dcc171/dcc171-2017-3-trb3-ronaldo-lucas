@@ -375,8 +375,11 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                     tarefa.setDESCRICAO(txtAreaDescricao.getText());
                     tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
                     tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
-
-                    daoTarefa.alterar(tarefa); 
+                   
+                    daoTarefa.alterar(tarefa);
+                    if(tarefa.getSTATUS().equals("Finalizada")){
+                        daoTarefa.excluirListaDependentes(tarefa);
+                    }
                 }
 
                 JOptionPane.showMessageDialog(null, "Gravação efetuada com sucesso!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
@@ -581,9 +584,7 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         lblDiferencadeDias.setText(x +"%");
         pgbProgresso.setValue(x);
         
-        if (
-              (dtInicio.get(Calendar.DAY_OF_MONTH) < dtAtual.get(Calendar.DAY_OF_MONTH)
-           || (dtInicio.get(Calendar.DAY_OF_MONTH) == dtAtual.get(Calendar.DAY_OF_MONTH))) 
+        if ((dtInicio.after(dtAtual) || dtInicio.equals(dtAtual))&&((dtFim.after(dtAtual))||dtFim.equals(dtAtual)) 
            && (comboBoxStatus.getSelectedItem() == "Iniciado")){
             pgbProgresso.setVisible(true);    
             lblDiferencadeDias.setVisible(true);
@@ -624,10 +625,10 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         dtInicioProj.setTime(sdf.parse(dtInicio));
         dtFimproj.setTime(sdf.parse(dtFim));
             
-        if((dtInicioTar.get(Calendar.DAY_OF_MONTH)) < (dtInicioProj.get(Calendar.DAY_OF_MONTH))){
+        if(dtInicioTar.before(dtInicioProj)){
             retorno = false;
         }
-        if ((dtFimTar.get(Calendar.DAY_OF_MONTH)) > (dtFimproj.get(Calendar.DAY_OF_MONTH))){
+        if (dtFimTar.after(dtFimproj)){
             retorno = false;
         }
         return retorno;

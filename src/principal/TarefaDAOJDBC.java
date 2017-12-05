@@ -25,6 +25,7 @@ public class TarefaDAOJDBC implements TarefaDAO{
     private final PreparedStatement comandoInsereColaborador;
     private final PreparedStatement comandoVerificaColaboradores;
     private final PreparedStatement comandoListaUnico;
+    private final PreparedStatement comandoExcluirListaDependentes;
 
     public TarefaDAOJDBC() throws Exception {
         conexao = ConexaoJavaDB.getConnection();
@@ -35,7 +36,7 @@ public class TarefaDAOJDBC implements TarefaDAO{
         comandoListarTodos = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS");
         comandoListarTodosProjeto = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where id_projeto = ? order by id_projeto, id");
         comandoListarAFazer = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where status = 'Pendente' order by id_projeto, id");
-        comandoListarPodeIniciar = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where id not in (select id_tarefa from LISTA_TAREFAS) order by id_projeto, id");
+        comandoListarPodeIniciar = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where id not in (select id_tarefa from LISTA_TAREFAS) and status = 'Pendente' order by id_projeto, id");
         comandoListarFinalizadas = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where status = 'Finalizada' order by id_projeto, id");
         comandoListaUnico = conexao.prepareStatement("SELECT id_projeto, id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where id = ?");
         comandoListarDependentes = conexao.prepareStatement("SELECT * FROM LISTA_TAREFAS Where id_tarefa = ?");
@@ -44,6 +45,7 @@ public class TarefaDAOJDBC implements TarefaDAO{
         comandoSeleciona = conexao.prepareStatement("SELECT * FROM TAREFAS");
         comandoAtribuiDependencia = conexao.prepareStatement("INSERT INTO LISTA_TAREFAS(ID_TAREFA, ID_TAREFA_PENDENTE) VALUES (?,?)");
         comandoListarAtribuiDependencia = conexao.prepareStatement("SELECT id, descricao, dt_inicio, dt_fim, status FROM TAREFAS where id_projeto = ? and id <> ? and id not in (select id_tarefa_pendente from LISTA_TAREFAS)");
+        comandoExcluirListaDependentes = conexao.prepareStatement("Delete From LISTA_TAREFAS Where ID_TAREFA_PENDENTE = ?");
     }
 
     @Override
@@ -269,6 +271,13 @@ public class TarefaDAOJDBC implements TarefaDAO{
             tarefas.add(tarefa);
         }
         return tarefas;
+    }
+
+    @Override
+    public void excluirListaDependentes(Tarefa tarefa) throws Exception {
+        comandoExcluirListaDependentes.clearParameters();
+        comandoExcluirListaDependentes.setInt(1, tarefa.getID());
+        comandoExcluirListaDependentes.executeUpdate();
     }
     
 }
