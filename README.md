@@ -12,12 +12,15 @@
 
 **Modelo do banco de dados:**
 
-<a href="https://ibb.co/gchL2m"><img src="https://image.ibb.co/dJp02m/ModeloBD.png" alt="ModeloBD" border="0"></a>
+<a href="https://ibb.co/dhLnvG"><img src="https://image.ibb.co/eFvLFG/ModeloBD.png" alt="ModeloBD" border="0"></a>
 
 
 **Classes utilizadas:**
 
 - Interfaces:
+	- AtribuirDependencia;
+	- AtribuirColaborador;
+	- ConsultaTarefas;
 	- JanelaPrincipal;
 	- CadastrarColaborador;
 	- CadastrarProjeto;
@@ -46,4 +49,4 @@
 
 **Pontos que podem ser melhorados:**
 
-- <p align="justify">TEXTO EXEMPLO;</p>
+- <p align="justify">Poderia ser feita uma versão web do sistema para ficar de acesso mais fácil a diversos tipo de empresas;</p>
