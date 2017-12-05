@@ -20,7 +20,7 @@ public class ProjetoDAOJDBC implements ProjetoDAO {
         comandoInsere = conexao.prepareStatement("Insert Into PROJETO(id, descricao, dt_inicio, dt_fim) VALUES (?,?,?,?)");
         comandoExclui = conexao.prepareStatement("Delete From PROJETO Where ID = ?");
         comandoAltera = conexao.prepareStatement("Update PROJETO set descricao = ?, dt_inicio = ?, dt_fim = ? where id = ?");
-        comandoListar = conexao.prepareStatement("SELECT id, descricao, dt_inicio, dt_fim FROM PROJETO order by dt_inicio");
+        comandoListar = conexao.prepareStatement("SELECT id, descricao, dt_inicio, dt_fim FROM PROJETO order by id");
         comandoSeleciona = conexao.prepareStatement("SELECT * FROM PROJETO");
     }
 

@@ -2,8 +2,10 @@ package principal;
 
 import java.awt.Color;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -18,6 +20,12 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         this.daoTarefa = daoTarefa; 
         this.daoProjeto = daoProjeto;        
         initComponents();
+        
+        lblDiferencadeDias.setVisible(false);
+        pgbProgresso.setMinimum(0);
+        pgbProgresso.setMaximum(100);
+        pgbProgresso.setValue(0);
+        pgbProgresso.setVisible(false);
         
         comboBoxStatus.addItem("Pendente");
         comboBoxStatus.addItem("Iniciado");
@@ -55,6 +63,8 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         txtDtInicio = new javax.swing.JFormattedTextField();
         btnCriaDependencia = new javax.swing.JButton();
         btnAtribuiColaborador = new javax.swing.JButton();
+        lblDiferencadeDias = new javax.swing.JLabel();
+        pgbProgresso = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Tarefas");
@@ -134,6 +144,11 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         lblStatus.setText("Status da tarefa");
 
@@ -154,6 +169,7 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         }
 
         btnCriaDependencia.setText("Criar Dependencia");
+        btnCriaDependencia.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btnCriaDependencia.setEnabled(false);
         btnCriaDependencia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -168,6 +184,8 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                 btnAtribuiColaboradorActionPerformed(evt);
             }
         });
+
+        lblDiferencadeDias.setText("100%");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -187,76 +205,79 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(lblStatus, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(comboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblProjetos)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(txtCodigo, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblDataInicio1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(lblDataInicio1, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblDataInicio)
                                     .addComponent(txtDtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(lblProjetos)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(comboBoxProjetos, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(lblStatus, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(comboBoxStatus, 0, 107, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
+                            .addComponent(comboBoxProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblDataFim)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(lblDescricaoTarefa)
-                                            .addGap(118, 118, 118))
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnAtribuiColaborador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnCriaDependencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                            .addGap(118, 118, 118))))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnCriaDependencia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnAtribuiColaborador, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(pgbProgresso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblDiferencadeDias, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblDataFim)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lblDataInicio)
-                                    .addComponent(lblDataInicio1))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtDtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblProjetos)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblDataInicio)
+                            .addComponent(lblDataInicio1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboBoxProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDtInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(11, 11, 11)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblDescricaoTarefa)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(pgbProgresso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblProjetos)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(comboBoxProjetos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(comboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblDiferencadeDias, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblDescricaoTarefa)
-                            .addComponent(btnCriaDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblDataFim)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(15, 15, 15)
-                                .addComponent(btnAtribuiColaborador, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtDtFim, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCriaDependencia, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
+                        .addComponent(btnAtribuiColaborador, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -330,41 +351,49 @@ public class CadastrarTarefa extends javax.swing.JFrame {
 
     private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
         try {
-            String dtInicio = txtDtInicio.getText();
-            String dtFim = txtDtFim.getText();
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            
-            
-            if (fNovo == true){
-                Tarefa tarefa = new Tarefa();
-                tarefa.setID(Integer.parseInt(txtCodigo.getText()));
-                tarefa.setDT_INICIO(format.parse(dtInicio));
-                tarefa.setDT_FIM(format.parse(dtFim));
-                tarefa.setDESCRICAO(txtAreaDescricao.getText());
-                tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
-                tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
+            if (VerificaDataProjeto()){
+                String dtInicio = txtDtInicio.getText();
+                String dtFim = txtDtFim.getText();
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
-                daoTarefa.criar(tarefa);    
+
+                if (fNovo == true){
+                    Tarefa tarefa = new Tarefa();
+                    tarefa.setID(Integer.parseInt(txtCodigo.getText()));
+                    tarefa.setDT_INICIO(format.parse(dtInicio));
+                    tarefa.setDT_FIM(format.parse(dtFim));
+                    tarefa.setDESCRICAO(txtAreaDescricao.getText());
+                    tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
+                    tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
+
+                    daoTarefa.criar(tarefa);    
+                }else{
+                    Tarefa tarefa = new Tarefa();
+                    tarefa.setID(Integer.parseInt(txtCodigo.getText()));
+                    tarefa.setDT_INICIO(format.parse(dtInicio));
+                    tarefa.setDT_FIM(format.parse(dtFim));
+                    tarefa.setDESCRICAO(txtAreaDescricao.getText());
+                    tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
+                    tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
+
+                    daoTarefa.alterar(tarefa); 
+                }
+
+                JOptionPane.showMessageDialog(null, "Gravação efetuada com sucesso!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
+                fNovo = false;
+                btnNovo.setEnabled(true);
+                btnExcluir.setEnabled(true);
+                txtCodigo.setEnabled(true);
+                comboBoxProjetos.setEnabled(true);
+                lblDiferencadeDias.setVisible(false);
+                pgbProgresso.setValue(0);
+                pgbProgresso.setVisible(false);
+                limpaCampos();
+                atualizaTabela();    
             }else{
-                Tarefa tarefa = new Tarefa();
-                tarefa.setID(Integer.parseInt(txtCodigo.getText()));
-                tarefa.setDT_INICIO(format.parse(dtInicio));
-                tarefa.setDT_FIM(format.parse(dtFim));
-                tarefa.setDESCRICAO(txtAreaDescricao.getText());
-                tarefa.setID_PROJETO(Integer.parseInt(comboBoxProjetos.getSelectedItem().toString()));
-                tarefa.setSTATUS(comboBoxStatus.getSelectedItem().toString());
-
-                daoTarefa.alterar(tarefa); 
+                JOptionPane.showMessageDialog(null, "Data de inicio menor que do projeto, ou final maior que do projeto!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
             }
-
-            JOptionPane.showMessageDialog(null, "Gravação efetuada com sucesso!", "SysProj", JOptionPane.INFORMATION_MESSAGE);
-            fNovo = false;
-            btnNovo.setEnabled(true);
-            btnExcluir.setEnabled(true);
-            txtCodigo.setEnabled(true);
-            comboBoxProjetos.setEnabled(true);
-            limpaCampos();
-            atualizaTabela(); 
+             
         } catch (Exception erro) {
             erro.printStackTrace();
         }
@@ -406,6 +435,7 @@ public class CadastrarTarefa extends javax.swing.JFrame {
                     comboBoxProjetos.setEnabled(false);
                     btnCriaDependencia.setEnabled(true);
                     btnAtribuiColaborador.setEnabled(true);
+                    CalculaDifDias();
                 }
             }
         } catch (Exception erro) {
@@ -440,6 +470,21 @@ public class CadastrarTarefa extends javax.swing.JFrame {
             erro.printStackTrace();
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        limpaCampos();
+        txtCodigo.setEnabled(true);
+        pgbProgresso.setVisible(false);
+        lblDiferencadeDias.setVisible(false);
+        btnNovo.setEnabled(true);
+        btnExcluir.setEnabled(true);
+        btnCriaDependencia.setEnabled(false);
+        btnAtribuiColaborador.setEnabled(false);
+        comboBoxStatus.setSelectedIndex(0);
+        comboBoxProjetos.setEnabled(true);
+        comboBoxProjetos.setSelectedIndex(0);
+        fNovo = false;
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     
     private void atualizaTabela() {
@@ -516,6 +561,78 @@ public class CadastrarTarefa extends javax.swing.JFrame {
         comboBoxStatus.setSelectedIndex(0);
     }
     
+    private void CalculaDifDias(){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar dtAtual = Calendar.getInstance();
+        Calendar dtFim = Calendar.getInstance();
+        Calendar dtInicio = Calendar.getInstance();
+        Integer  x = 0;
+        
+        try {
+            dtInicio.setTime(sdf.parse(txtDtInicio.getText()));
+            dtAtual.setTime(new Date());
+            dtFim.setTime(sdf.parse(txtDtFim.getText()));
+        } catch (java.text.ParseException e ) 
+        {}
+        int diasTotal = dtFim.get(Calendar.DAY_OF_MONTH) - dtInicio.get(Calendar.DAY_OF_MONTH);
+        int diasTermino = dtFim.get(Calendar.DAY_OF_MONTH) - dtAtual.get(Calendar.DAY_OF_MONTH);        
+        
+        x = 100 - (diasTermino * 100) / diasTotal;
+        lblDiferencadeDias.setText(x +"%");
+        pgbProgresso.setValue(x);
+        
+        if (
+              (dtInicio.get(Calendar.DAY_OF_MONTH) < dtAtual.get(Calendar.DAY_OF_MONTH)
+           || (dtInicio.get(Calendar.DAY_OF_MONTH) == dtAtual.get(Calendar.DAY_OF_MONTH))) 
+           && (comboBoxStatus.getSelectedItem() == "Iniciado")){
+            pgbProgresso.setVisible(true);    
+            lblDiferencadeDias.setVisible(true);
+        }else{
+            pgbProgresso.setVisible(false);    
+            lblDiferencadeDias.setVisible(false);
+        }
+        
+    }
+    
+    private Boolean VerificaDataProjeto() throws Exception{
+        Boolean retorno = true;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date dt1 = null;
+        Date dt2 = null;
+        List<Projeto> p = daoProjeto.listaTodos();
+        for(int i = 0; i < p.size(); i++){
+            if(p.get(i).getID() == Integer.parseInt(comboBoxProjetos.getSelectedItem().toString())){
+                Projeto proj = new Projeto();
+                proj.setDT_INICIO(p.get(i).getDT_INICIO());
+                proj.setDT_FIM(p.get(i).getDT_FIM());
+                
+                dt1 = p.get(i).getDT_INICIO();
+                dt2 = p.get(i).getDT_FIM();
+            }
+        }
+        
+        Calendar dtInicioTar = Calendar.getInstance();
+        Calendar dtFimTar = Calendar.getInstance();        
+        Calendar dtInicioProj = Calendar.getInstance();
+        Calendar dtFimproj = Calendar.getInstance();
+        
+        String dtInicio = new SimpleDateFormat("dd/MM/yyyy").format(dt1);
+        String dtFim = new SimpleDateFormat("dd/MM/yyyy").format(dt2);
+                
+        dtInicioTar.setTime(sdf.parse(txtDtInicio.getText()));
+        dtFimTar.setTime(sdf.parse(txtDtFim.getText()));        
+        dtInicioProj.setTime(sdf.parse(dtInicio));
+        dtFimproj.setTime(sdf.parse(dtFim));
+            
+        if((dtInicioTar.get(Calendar.DAY_OF_MONTH)) < (dtInicioProj.get(Calendar.DAY_OF_MONTH))){
+            retorno = false;
+        }
+        if ((dtFimTar.get(Calendar.DAY_OF_MONTH)) > (dtFimproj.get(Calendar.DAY_OF_MONTH))){
+            retorno = false;
+        }
+        return retorno;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtribuiColaborador;
     private javax.swing.JButton btnCancelar;
@@ -531,8 +648,10 @@ public class CadastrarTarefa extends javax.swing.JFrame {
     private javax.swing.JLabel lblDataInicio;
     private javax.swing.JLabel lblDataInicio1;
     private javax.swing.JLabel lblDescricaoTarefa;
+    private javax.swing.JLabel lblDiferencadeDias;
     private javax.swing.JLabel lblProjetos;
     private javax.swing.JLabel lblStatus;
+    private javax.swing.JProgressBar pgbProgresso;
     private javax.swing.JTable tabelaTarefas;
     private javax.swing.JTextArea txtAreaDescricao;
     private javax.swing.JTextField txtCodigo;
